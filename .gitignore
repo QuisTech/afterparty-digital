@@ -1,0 +1,17 @@
+# Video & Audio Assets
+video_temp/
+*.webm
+narration.mp3
+afterparty_demo.mp4
+afterparty_digital_demo.mp4
+
+# Vercel Configuration
+.vercel/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# System Files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,18 @@
+# Exclude git configuration
+.git/
+.gitignore
+
+# Exclude large video and audio files
+video_temp/
+*.webm
+narration.mp3
+afterparty_demo.mp4
+afterparty_digital_demo.mp4
+
+# Exclude dev files and documentation
+generate_demo.py
+devpost.md
+README.md
+task.md
+walkthrough.md
+implementation_plan.md
