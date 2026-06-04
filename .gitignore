@@ -15,3 +15,6 @@ __pycache__/
 # System Files
 .DS_Store
 Thumbs.db
+.vercel
+.env*
+node_modules/
