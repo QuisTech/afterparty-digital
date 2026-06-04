@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Afterparty Digital - Live</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #0a0a1a 0%, #1a0530 100%); }
+    .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); }
+  </style>
+</head>
+<body class="text-white">
+  <div class="min-h-screen p-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="glass rounded-3xl p-8 text-center mb-8">
+        <h1 class="text-4xl font-bold">🔥 AFTERPARTY DIGITAL</h1>
+        <p class="text-gray-400 mt-2">Live Multiplayer Mode</p>
+      </div>
+      
+      <div id="joinScreen" class="glass rounded-3xl p-12 max-w-md mx-auto text-center">
+        <div class="text-8xl mb-6">💎</div>
+        <input type="text" id="username" placeholder="Your name" 
+          class="w-full bg-black/50 border rounded-xl px-4 py-3 mb-4">
+        <button onclick="join()" 
+          class="w-full bg-pink-600 py-3 rounded-xl font-bold">Enter Cavern</button>
+      </div>
+      
+      <div id="gameScreen" style="display:none">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="glass rounded-3xl p-8 text-center">
+            <h2 class="text-2xl font-bold mb-4">⛏️ MINE GEMS</h2>
+            <button onclick="mine()" class="text-9xl hover:scale-110 transition-transform">💎</button>
+            <p class="text-2xl mt-4">Your gems: <span id="myGems" class="text-yellow-400">0</span></p>
+          </div>
+          
+          <div class="glass rounded-3xl p-8">
+            <h2 class="text-2xl font-bold mb-4">💬 LIVE CHAT</h2>
+            <div id="chat" class="h-96 overflow-y-auto space-y-2 mb-4 text-sm"></div>
+            <div class="flex gap-2">
+              <input type="text" id="message" placeholder="Type message..." 
+                class="flex-1 bg-black/50 border rounded-xl px-4 py-2">
+              <button onclick="send()" class="bg-cyan-600 px-6 rounded-xl">Send</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="glass rounded-3xl p-6 mt-8">
+          <h2 class="text-xl font-bold mb-4">🏆 LEADERBOARD</h2>
+          <div id="leaderboard" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    let socket, currentUser;
+    
+    function join() {
+      currentUser = document.getElementById('username').value.trim();
+      if (!currentUser) return alert('Enter your name!');
+      
+      socket = io();
+      socket.emit('join', currentUser);
+      
+      socket.on('chat history', (messages) => {
+        document.getElementById('chat').innerHTML = '';
+        messages.forEach(m => addMessage(m.username, m.message));
+      });
+      
+      socket.on('chat message', (data) => addMessage(data.username, data.message));
+      socket.on('system message', (msg) => addMessage('🔥 SYSTEM', msg));
+      
+      socket.on('users update', (users) => {
+        document.getElementById('leaderboard').innerHTML = users.slice(0,10).map((u,i) => `
+          <div class="flex justify-between p-3 bg-white/5 rounded-xl">
+            <span>${i === 0 ? '👑' : '💎'} ${u.name}</span>
+            <span class="text-yellow-400">${u.gems} gems</span>
+          </div>
+        `).join('');
+      });
+      
+      socket.on('gem update', (data) => {
+        if (data.username === currentUser) {
+          document.getElementById('myGems').innerHTML = data.gems;
+        }
+      });
+      
+      document.getElementById('joinScreen').style.display = 'none';
+      document.getElementById('gameScreen').style.display = 'block';
+    }
+    
+    function addMessage(name, msg) {
+      const chat = document.getElementById('chat');
+      const div = document.createElement('div');
+      div.className = 'border-b border-white/10 pb-2';
+      div.innerHTML = `<span class="text-cyan-400">${name}:</span> ${msg}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    
+    function send() {
+      const input = document.getElementById('message');
+      const msg = input.value.trim();
+      if (msg && socket) {
+        socket.emit('chat message', { message: msg });
+        input.value = '';
+      }
+    }
+    
+    function mine() {
+      if (socket) {
+        socket.emit('mine gem');
+        confetti({ particleCount: 30, colors: ['#FF007F', '#00FFFF'] });
+      }
+    }
+    
+    document.getElementById('message')?.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') send();
+    });
+  </script>
+</body>
+</html>
