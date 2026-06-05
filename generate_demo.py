@@ -8,21 +8,21 @@ from playwright.async_api import async_playwright
 # 1. Narrator voiceover text
 VOICEOVER_TEXT = (
     "Welcome to Afterparty Digital—the ultimate interactive networking and project-launch platform designed for hackathon late-hours. "
-    "Instead of a static event page, we've designed a stepped cavern descent that gamifies connections. "
-    "Right at the surface launch room, organizers deploy custom event caverns with capacity controls, linked instantly to real-time status trackers. "
+    "Instead of a static event page, we've designed a stepped cavern descent that gamifies connections, fully powered by a live Node.js and Socket.io backend. "
+    "Right at the surface launch room, organizers deploy custom event caverns, instantly synced to our MongoDB Atlas database. "
     "As we descend into the Amethyst Networking Mine, we reveal the active hackers inside the shaft. "
     "Here, participants search profiles by skills or filter by developer roles to spark immediate matches. "
     "Let's find full stack developers, inspect an icebreaker card, and register a connection. "
-    "Further down, hackers gather around the crystal campfire to chat in real-time. "
-    "But the caverns also feature an active mining mini-game. "
+    "Further down, hackers gather around the crystal campfire to chat in real-time, and post snapshots to the live Photo Wall. "
+    "The caverns also feature an active mining mini-game. "
     "Mined crystals serve as currency in the upgrading shop to buy helper companions. "
-    "We can click the amethyst gemstone to mine, buy a pickaxe, and locate hidden crystals hidden in the cave walls. "
+    "We can click the amethyst gemstone to mine, buy a pickaxe, locate hidden crystals, and capture a flash moment snapshot. "
     "Next, the Alliance Forge solves team formation. "
-    "Teams register their project names, technical stacks, and talent requirements, making it easy for solo hackers to search listings, send inquiries, and join active alliances. "
+    "Teams register their project names and technical stacks, making it easy for solo hackers to search listings, send inquiries, and join active alliances. "
     "When brainstorms hit a wall, developers spin the Oracle of Ideas dials. "
-    "This slot-machine concept uses combination logic to generate randomized hackathon project prompts along with feasibility metrics. "
+    "This slot-machine concept uses combination logic to generate randomized hackathon project prompts. "
     "Finally, we reach the Sponsor Bounty Board to view integration rewards, before smooth-scrolling back to the surface. "
-    "Afterparty Digital turns event networking into an unforgettable journey."
+    "Afterparty Digital turns event networking into an unforgettable real-time journey."
 )
 
 # 2. Virtual cursor CSS/JS to inject on page load
@@ -151,13 +151,13 @@ async def record_walkthrough(html_path, temp_dir):
         )
         
         page = await context.new_page()
-        file_url = f"file:///{os.path.abspath(html_path).replace(os.sep, '/')}"
+        file_url = "https://afterparty-digital.vercel.app/"
         print(f"   Opening page: {file_url}")
         
         # Inject the virtual cursor script on load
         await page.add_init_script(CURSOR_INJECT_JS)
-        await page.goto(file_url)
-        await page.wait_for_timeout(1500) # let initial animations settle
+        await page.goto(file_url, wait_until="networkidle")
+        await page.wait_for_timeout(3000) # let initial animations settle
         
         # --- SCENE 1: Launch Room Onboarding (Form entry) ---
         print("   - Recording Scene 1: Launch Room Form Entry")
@@ -199,7 +199,10 @@ async def record_walkthrough(html_path, temp_dir):
         await smooth_click(page, "#btn-upgrade-pickaxe")
         # Click the hidden gem near campfire
         await smooth_click(page, ".hidden-gem")
-        await page.wait_for_timeout(1500)
+        await page.wait_for_timeout(1000)
+        # Capture a Flash Moment photo
+        await smooth_click(page, "button:has-text('Capture Moment')")
+        await page.wait_for_timeout(2000)
         
         # --- SCENE 4: The Alliance Forge ---
         print("   - Recording Scene 4: Team Forge Registration")

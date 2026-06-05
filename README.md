@@ -25,13 +25,14 @@
 
 ## 🛠️ Quick Start
 
-### Running the Webpage Locally
-Since this is built on top of high-performance vanilla HTML5, CSS3, and Tailwind, there is **zero build/compile step**.
-Just double-click or open `index.html` in any web browser!
+### Running the Application Locally
+Since the frontend is built on top of high-performance vanilla HTML5, CSS3, and Tailwind, it runs instantly in any browser. It is fully connected to our production **AWS Elastic Beanstalk Node.js backend** and **MongoDB Atlas** database via `socket.io` to provide real-time chat, live photo wall uploads, and team sync.
 
 ### Project Structure
-* `index.html` — The main static landing page containing all styles, SVG railroad paths, layouts, and interactive JavaScript handlers.
+* `index.html` — The main static frontend, containing SVG railroad paths, and Socket.io JavaScript handlers connecting to the AWS backend.
+* `backend-mongo/` — The complete Node.js + Socket.io backend that interacts with MongoDB Atlas.
 * `crystal_goose.png` — Asset image for the sloped minecart glider.
+* `deploy_eb.py` — Automation script for bundling and pushing backend releases to AWS Elastic Beanstalk.
 * `generate_demo.py` — Automated demo video creator script.
 * `devpost.md` — Submission summary for Devpost.
 

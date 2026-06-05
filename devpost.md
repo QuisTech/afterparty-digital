@@ -30,6 +30,8 @@ Afterparty Digital takes participants on a sloped diagonal descent through 6 cus
 
 ## 💻 How We Built It
 * **Frontend**: HTML5, CSS3 Glassmorphism, Tailwind CDN for layout utilities.
+* **Backend**: Node.js, Express, and Socket.io deployed on AWS Elastic Beanstalk behind a secure HTTPS CloudFront CDN proxy.
+* **Database**: Real-time integration with MongoDB Atlas to persist all caverns, teams, users, and photo wall uploads.
 * **Fonts & Icons**: Space Grotesk & Outfit typography (Google Fonts) with Font Awesome indicators.
 * **Math-derived SVG Track**: Built a custom dynamic sleepers generator that renders wooden ties mathematically perpendicular to the rail slope on load.
 * **Continuous Diagonal Translation**: Mapped mouse vertical scroll percentages to horizontal (`-500vw`) and vertical (`-300vh`) CSS transforms on the main container, aligning a floating minecart goose to lock onto the sloped rails.
