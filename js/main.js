@@ -108,18 +108,18 @@ window.addEventListener('scroll', () => {
     // Last realm: only slides south, no next realm to transition to
     translateX = -i * 100;
     const t = Math.min(1, f / 0.6);
-    translateY = -i * 60 - t * 40;
+    translateY = -i * 60 - t * 10;
   } else {
     if (f <= 0.6) {
-      // Phase 1: Slide south (inspect current realm)
+      // Phase 1: Slide south (inspect current realm - subtle vertical drift to keep content in scope)
       const t = f / 0.6;
       translateX = -i * 100;
-      translateY = -i * 60 - t * 40;
+      translateY = -i * 60 - t * 10;
     } else {
       // Phase 2: Slide diagonally to the next realm
       const t = (f - 0.6) / 0.4;
       translateX = -i * 100 - t * 100;
-      translateY = (-i * 60 - 40) - t * 20;
+      translateY = (-i * 60 - 10) - t * 50;
     }
   }
 

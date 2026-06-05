@@ -19,7 +19,7 @@ export async function loadComponent(name, path, containerSelector, fallbackHtml 
       return cached;
     }
 
-    const response = await fetch(path);
+    const response = await fetch(`${path}?_=${Date.now()}`);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const html = await response.text();
     componentCache.set(path, html);
