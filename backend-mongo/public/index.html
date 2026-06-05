@@ -1087,6 +1087,12 @@
       }
     });
 
+    // 📡 AWS Backend API URL (Replace with your actual AWS App Runner / ECS ALB domain)
+    // If running on Vercel, it connects to AWS. If running locally, it defaults to localhost:3000.
+    const BACKEND_URL = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+      ? 'http://localhost:3000'
+      : 'https://your-aws-backend-url.com'; // 👈 REPLACE THIS with your secure AWS URL (must be https://)
+
     // Handle Join Event
     function handleJoin(e) {
       e.preventDefault();
@@ -1098,7 +1104,7 @@
       document.getElementById('join-modal').style.display = 'none';
 
       // Connect to socket.io
-      socket = io();
+      socket = io(BACKEND_URL);
 
       // Listeners
       socket.on('chat history', (messages) => {
@@ -1195,7 +1201,8 @@
       
       // Update Header Metrics
       document.getElementById('stat-checkins').innerText = usersList.length;
-      document.getElementById('online-count').innerText = usersList.length;
+      const onlineCountEl = document.getElementById('online-count');
+      if (onlineCountEl) onlineCountEl.innerText = usersList.length;
       
       // Sort users by gems descending
       usersList.sort((a, b) => b.gems - a.gems);

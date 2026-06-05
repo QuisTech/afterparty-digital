@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
@@ -12,8 +14,8 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// ⭐ REPLACE THE PASSWORD BELOW ⭐
-const MONGODB_URI = 'mongodb+srv://michquis_db_user:eDzC2nVlElZjAEHj@afterpartycluster.3snvrrx.mongodb.net/afterparty?appName=AfterpartyCluster';
+// Setup MongoDB URI from environment variables or fallback
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://michquis_db_user:eDzC2nVlElZjAEHj@afterpartycluster.3snvrrx.mongodb.net/afterparty?appName=AfterpartyCluster';
 
 console.log('📡 Connecting to MongoDB Atlas...');
 mongoose.connect(MONGODB_URI)
@@ -74,8 +76,13 @@ io.on('connection', (socket) => {
   });
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`\n🚀 Server: http://localhost:${PORT}`);
   console.log(`💎 MongoDB: ${mongoose.connection.readyState === 1 ? 'CONNECTED' : 'DISCONNECTED'}\n`);
 });
+
+// Heartbeat logger to prevent sandbox process termination due to inactivity
+setInterval(() => {
+  console.log(`📡 [${new Date().toISOString()}] Heartbeat: Server active, MongoDB state: ${mongoose.connection.readyState}`);
+}, 60000);
