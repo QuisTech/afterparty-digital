@@ -3,7 +3,7 @@
 > Immersive Stepped Cavern Descent & Gamified Hackathon Networking
 > Built for the **Name.com Domain Roulette Challenge** (Domain: `afterparty.digital`)
 
-**Afterparty Digital** ([afterparty.digital](https://afterparty.digital)) is a production-ready, gamified event networking and project-launch platform designed to breathe life into hackathon afterparties. Rather than staring at dry list directories or generic event maps, developers descend step-by-step through a deep amethyst cavern shaft. 
+**Afterparty Digital** ([afterparty.digital](https://afterparty-digital.vercel.app/)) is a production-ready, gamified event networking and project-launch platform designed to breathe life into hackathon afterparties. Rather than staring at dry list directories or generic event maps, developers descend step-by-step through a deep amethyst cavern shaft. 
 
 Hackers explore candidate galleries, engage at a real-time campfire chat board, mine crystals in a clicker mini-game, coordinate Stack requirements in the Alliance Forge, spin random idea prompts, and browse sponsor bounties in an immersive, math-driven visual experience.
 
