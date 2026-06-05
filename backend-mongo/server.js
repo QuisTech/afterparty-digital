@@ -61,6 +61,17 @@ io.on('connection', (socket) => {
       io.emit('users update', users);
     }
   });
+
+  socket.on('spend gems', async (data) => {
+    const user = await User.findOne({ name: socket.username });
+    if (user && user.gems >= data.amount) {
+      user.gems -= data.amount;
+      await user.save();
+      io.emit('gem update', { username: socket.username, gems: user.gems });
+      const users = await User.find().select('name gems');
+      io.emit('users update', users);
+    }
+  });
 });
 
 const PORT = 3000;
