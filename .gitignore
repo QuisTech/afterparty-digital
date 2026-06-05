@@ -18,3 +18,11 @@ Thumbs.db
 .vercel
 .env*
 node_modules/
+
+# AWS Deployment Artifacts
+deploy.zip
+deploy_eb.py
+trust-policy.json
+cloudfront-config.json
+options.json
+*.pem
