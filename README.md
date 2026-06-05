@@ -1,71 +1,66 @@
 # Afterparty Digital 🌌
 
-> Immersive Diagonal Cavern Descent & Gamified Hackathon Networking
+> Immersive Stepped Cavern Descent & Gamified Hackathon Networking
+> Built for the **Name.com Domain Roulette Challenge** (Domain: `afterparty.digital`)
 
-**Afterparty Digital** (`afterparty.digital`) is a highly polished, gamified event networking and project-launch landing page. Designed specifically for hackathon after-hours, it guides developers down a diagonal cavern shaft along a railroad track through matchmaking mine shafts, real-time campfire chat rooms, clicker mini-games, team formation registries, and idea prompt slot machines.
+**Afterparty Digital** ([afterparty.digital](https://afterparty.digital)) is a production-ready, gamified event networking and project-launch platform designed to breathe life into hackathon afterparties. Rather than staring at dry list directories or generic event maps, developers descend step-by-step through a deep amethyst cavern shaft. 
 
----
-
-## 🚀 Live Demo & Presentation
-* **Live Deployment**: Deployable to Vercel.
-* **Submission Demo Video**: Located at `afterparty_digital_demo.mp4` (1080p upscaled walkthrough featuring Microsoft Ava Neural voiceover narration).
+Hackers explore candidate galleries, engage at a real-time campfire chat board, mine crystals in a clicker mini-game, coordinate Stack requirements in the Alliance Forge, spin random idea prompts, and browse sponsor bounties in an immersive, math-driven visual experience.
 
 ---
 
-## 🎨 Key Features & Realms
+## 🎭 Key Features & Realms
 
-1. **Launch Room (Realm 1)**: Ignites new event cavern shafts with capacity tracking and check-in QR codes.
-2. **Amethyst Networking Mine (Realm 2)**: Gallery showing developer profiles with search and role filters (AI, Devs, Design).
-3. **Crystal Campfire (Realm 3)**: Immersive CSS campfire, chat logs, and an **Amethyst Mining clicker game** containing a companion upgrades shop (steel pickaxes, helper geese) and hidden gemstones.
-4. **Alliance Forge (Realm 4)**: Recruits teammates for active projects by stack and missing roles.
-5. **Oracle of Ideas (Realm 5)**: Randomized tech/industry/goal slot-machine project generator.
-6. **Sponsor Bounty Board (Realm 6)**: OpenAI, MongoDB, and Vercel API rewards and rules.
-
----
-
-## 🛠️ Quick Start
-
-### Running the Application Locally
-Since the frontend is built on top of high-performance vanilla HTML5, CSS3, and Tailwind, it runs instantly in any browser. It is fully connected to our production **AWS Elastic Beanstalk Node.js backend** and **MongoDB Atlas** database via `socket.io` to provide real-time chat, live photo wall uploads, and team sync.
-
-### Project Structure
-* `index.html` — The main static frontend, containing SVG railroad paths, and Socket.io JavaScript handlers connecting to the AWS backend.
-* `backend-mongo/` — The complete Node.js + Socket.io backend that interacts with MongoDB Atlas.
-* `crystal_goose.png` — Asset image for the sloped minecart glider.
-* `deploy_eb.py` — Automation script for bundling and pushing backend releases to AWS Elastic Beanstalk.
-* `generate_demo.py` — Automated demo video creator script.
-* `devpost.md` — Submission summary for Devpost.
+1. **Launch Room (Realm 1)**: Deploy custom event caverns with capacity limits, synced instantly to active status dashboards and printable check-in QR codes.
+2. **Amethyst Networking Mine (Realm 2)**: A developer gallery displaying live profiles. Hackers can select their specific developer roles (AI Engineer, Full Stack Dev, UX Designer, etc.) during check-in, search profiles, and trigger instant matches.
+3. **Crystal Campfire & Upgrades Shop (Realm 3)**: A social arena containing:
+   * A flickering CSS campfire (with a stable nested hidden amethyst crystal easter egg).
+   * A real-time chat feed.
+   * An **Amethyst Mining clicker game** linked to a **Secure Upgrades Shop**. Click currency is validated server-side to prevent console click hacks, allowing users to buy Steel Pickaxes or hire Goose Miners.
+   * A **Live Photo Wall** feed with a vertically contained scroll layout so that live uploads never break the viewport height.
+4. **Alliance Forge (Realm 4)**: Coordinate project teams. Teams publish stack details and vacancies, and solo developers send instant inquiries.
+5. **Oracle of Ideas (Realm 5)**: A 3-dial slot machine that spins tech stacks, industry categories, and goals to generate prompt ideas with dynamic feasibility scores.
+6. **Sponsor Bounty Board (Realm 6)**: A showcase of developer challenges (OpenAI, MongoDB, Vercel) alongside API rules and awards.
 
 ---
 
-## 📹 Generating the Demo Presentation Video
+## 🛠️ Architecture & Stack
 
-We've packaged a custom Python pipeline to record a high-definition walk-through of the website, synchronize it with a neural text-to-speech voiceover, and compile the final output.
+The system is built as a highly optimized production app to provide zero-latency updates and reliable persistence:
+
+* **Frontend**: Highly polished, responsive Vanilla HTML5 & CSS3 with Tailwind. Employs a custom ES6 modular structure ([js/](file:///c:/Users/Administrator/.gemini/antigravity-ide/scratch/afterparty-digital-latest/js)) separating state, rendering, socket listeners, and gameplay.
+* **Backend**: Node.js, Express, and Socket.io deployed on **AWS Elastic Beanstalk** behind a secure HTTPS CloudFront proxy.
+* **Database**: MongoDB Atlas persisting all cavern instances, active users, chat history, teams, and liked moment uploads.
+* **Stepped Scroll Physics**: Converts standard mouse scroll events into segmented translations—sliding vertically down (`10vh`) to inspect the current realm fully, before sliding diagonally to the next.
+* **Viewport-Fixed Glider**: A custom-positioned minecart progress overlay (`crystal_goose.png`) that glides horizontally across the screen as you descend.
+
+---
+
+## 📦 Running Locally
 
 ### Prerequisites
-Make sure you have Playwright, `edge-tts`, and `ffmpeg` installed:
-```bash
-pip install playwright edge-tts
-playwright install chromium
-```
+* Node.js v18+
+* MongoDB Atlas connection string (already configured in our EB environment settings)
 
-### Run the Generator
-Run the script from your terminal:
+### 1. Launch the Backend Server
+Navigate to the backend directory, install dependencies, and run:
 ```bash
-python generate_demo.py
+cd backend-mongo
+npm install
+npm start
 ```
-This automatically:
-1. Synthesizes a narration script using the **Microsoft Ava Neural voice** (`narration.mp3`).
-2. Opens Chromium at `1280x720` and records the scrolling and clicking actions (injecting a custom virtual cursor).
-3. Merges the clips and upscales them back to a crisp `1920x1080` H.264 file (`afterparty_digital_demo.mp4`).
+This spins up the backend server locally at `http://localhost:3000`.
+
+### 2. Launch the Frontend
+Serve the root directory using any local web server. For example:
+```bash
+python -m http.server 5500
+```
+Open `http://localhost:5500` in your browser. The frontend automatically detects localhost and establishes a websocket connection.
 
 ---
 
-## 📦 Deployment (Vercel)
-The project is configured for direct static deployment to Vercel.
+## 🚀 Deployment
 
-To deploy, make sure you have Vercel CLI installed, and run:
-```bash
-vercel --yes
-```
-*(The `.vercelignore` file prevents the heavy WebM/MP4 videos from uploading to Vercel, keeping the build size lightweight).*
+* **Frontend**: Directly deployable to Vercel. Pushing to the `main` branch automatically triggers Vercel static build deploys based on the [vercel.json](file:///c:/Users/Administrator/.gemini/antigravity-ide/scratch/afterparty-digital-latest/vercel.json) config.
+* **Backend**: Deployed to AWS Elastic Beanstalk. The [deploy_eb.py](file:///c:/Users/Administrator/.gemini/antigravity-ide/scratch/afterparty-digital-latest/deploy_eb.py) Python utility automatically packages, uploads, and deploys updates to the environment using the AWS CLI.
