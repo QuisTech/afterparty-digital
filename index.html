@@ -1,36 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Afterparty Digital - Event Networking Platform</title>
-  <meta name="description" content="A complete, production-ready web application for hackathons. The domain is afterparty.digital." />
-  
+  <meta name="description"
+    content="A complete, production-ready web application for hackathons. The domain is afterparty.digital." />
+
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Font Awesome CDN -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
+
   <!-- Canvas Confetti CDN -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  
+
   <!-- Socket.io CDN -->
   <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-  
+
   <!-- Google Fonts: Outfit & Space Grotesk -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;500;700&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
-      --primary: #FF007F; /* Electric Magenta */
-      --secondary: #00FFFF; /* Neon Cyan */
-      --amber: #FFB800; /* Glowing Gold/Amber */
-      --bg: #05040e; /* Deep Space/Cavern Background */
-      --card-bg: rgba(16, 12, 36, 0.78); /* Translucent Amethyst */
-      --card-border: rgba(99, 74, 186, 0.22); /* Glowing Crystal Border */
+      --primary: #FF007F;
+      /* Electric Magenta */
+      --secondary: #00FFFF;
+      /* Neon Cyan */
+      --amber: #FFB800;
+      /* Glowing Gold/Amber */
+      --bg: #05040e;
+      /* Deep Space/Cavern Background */
+      --card-bg: rgba(16, 12, 36, 0.78);
+      /* Translucent Amethyst */
+      --card-border: rgba(99, 74, 186, 0.22);
+      /* Glowing Crystal Border */
     }
 
     body {
@@ -40,13 +50,18 @@
       overflow-x: hidden;
       /* Scroll vertical height to drive horizontal + vertical diagonal scroll */
       height: 600vh;
-      background-image: 
+      background-image:
         radial-gradient(circle at 10% 20%, rgba(255, 0, 127, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.05) 0%, transparent 40%),
         radial-gradient(circle at 50% 50%, rgba(255, 184, 0, 0.03) 0%, transparent 50%);
     }
 
-    h1, h2, h3, h4, h5, h6 {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
       font-family: 'Outfit', sans-serif;
     }
 
@@ -56,7 +71,8 @@
       top: 0;
       left: 0;
       width: 600vw;
-      height: 420vh; /* Accommodates stepped realms up to 300vh drop */
+      height: 420vh;
+      /* Accommodates stepped realms up to 300vh drop */
       display: block;
       transform: translate(0, 0);
       transition: transform 0.2s cubic-bezier(0.1, 0.75, 0.25, 1);
@@ -70,7 +86,7 @@
       left: 0;
       width: 250vw;
       height: 180vh;
-      background: 
+      background:
         radial-gradient(circle at 15% 25%, rgba(255, 0, 127, 0.07) 0%, transparent 40%),
         radial-gradient(circle at 85% 75%, rgba(0, 255, 255, 0.07) 0%, transparent 40%),
         radial-gradient(circle at 50% 45%, rgba(255, 184, 0, 0.05) 0%, transparent 50%);
@@ -86,9 +102,19 @@
       animation: floatDust 8s ease-in-out infinite;
       pointer-events: none;
     }
+
     @keyframes floatDust {
-      0%, 100% { transform: translateY(0) translateX(0); opacity: 0.1; }
-      50% { transform: translateY(-20px) translateX(15px); opacity: 0.35; }
+
+      0%,
+      100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0.1;
+      }
+
+      50% {
+        transform: translateY(-20px) translateX(15px);
+        opacity: 0.35;
+      }
     }
 
     .realm {
@@ -103,17 +129,46 @@
       pointer-events: none;
     }
 
-    .realm > * {
+    .realm>* {
       pointer-events: auto;
     }
 
     /* Stepped positioning for Diagonal Scroll (sideways + downward) */
-    #realm-1 { top: 0vh; left: 0vw; padding-top: 80px; }
-    #realm-2 { top: 60vh; left: 100vw; padding-top: 80px; }
-    #realm-3 { top: 120vh; left: 200vw; padding-top: 80px; }
-    #realm-4 { top: 180vh; left: 300vw; padding-top: 80px; }
-    #realm-5 { top: 240vh; left: 400vw; padding-top: 80px; }
-    #realm-6 { top: 300vh; left: 500vw; padding-top: 80px; }
+    #realm-1 {
+      top: 0vh;
+      left: 0vw;
+      padding-top: 80px;
+    }
+
+    #realm-2 {
+      top: 60vh;
+      left: 100vw;
+      padding-top: 80px;
+    }
+
+    #realm-3 {
+      top: 120vh;
+      left: 200vw;
+      padding-top: 80px;
+    }
+
+    #realm-4 {
+      top: 180vh;
+      left: 300vw;
+      padding-top: 80px;
+    }
+
+    #realm-5 {
+      top: 240vh;
+      left: 400vw;
+      padding-top: 80px;
+    }
+
+    #realm-6 {
+      top: 300vh;
+      left: 500vw;
+      padding-top: 80px;
+    }
 
     /* Glassmorphism & Cavern Shadows */
     .glass-panel {
@@ -144,32 +199,45 @@
 
     /* Holographic transparent SVG track and glider */
     #rail-svg {
-      opacity: 0.04; /* Extremely transparent guide HUD */
+      opacity: 0.04;
+      /* Extremely transparent guide HUD */
       mix-blend-mode: screen;
       z-index: 5;
-      pointer-events: none; /* Keep completely click-through */
+      pointer-events: none;
+      /* Keep completely click-through */
     }
 
     .minecart-goose {
       position: absolute;
-      z-index: 6; /* behind page elements */
-      pointer-events: none; /* 100% click-through, doesn't cover or block any part of website */
+      z-index: 6;
+      /* behind page elements */
+      pointer-events: none;
+      /* 100% click-through, doesn't cover or block any part of website */
       transition: left 0.2s cubic-bezier(0.1, 0.75, 0.25, 1), top 0.2s cubic-bezier(0.1, 0.75, 0.25, 1);
       animation: floatCart 3s ease-in-out infinite;
-      opacity: 0.10; /* Transparent glider */
+      opacity: 0.10;
+      /* Transparent glider */
       mix-blend-mode: screen;
       filter: drop-shadow(0 0 4px var(--primary));
     }
 
     @keyframes floatCart {
-      0%, 100% { transform: translate(-50%, -80%) translateY(0) rotate(0deg); }
-      50% { transform: translate(-50%, -80%) translateY(-5px) rotate(-1deg); }
+
+      0%,
+      100% {
+        transform: translate(-50%, -80%) translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translate(-50%, -80%) translateY(-5px) rotate(-1deg);
+      }
     }
 
     /* Card Adventure Hovers */
     .card-adventure {
       transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
     }
+
     .card-adventure:hover {
       transform: translateY(-6px);
       border-color: rgba(255, 0, 127, 0.6);
@@ -180,6 +248,7 @@
       background: linear-gradient(135deg, var(--primary) 0%, #d6006a 100%);
       transition: all 0.3s ease;
     }
+
     .btn-adventure:hover {
       transform: scale(1.03);
       box-shadow: 0 0 20px rgba(255, 0, 127, 0.6);
@@ -189,6 +258,7 @@
     .gem-clicker {
       transition: transform 0.1s ease;
     }
+
     .gem-clicker:active {
       transform: scale(0.88) rotate(-4deg);
     }
@@ -202,6 +272,7 @@
       overflow: hidden;
       border: 1px solid rgba(255, 255, 255, 0.08);
     }
+
     .mining-progress-bar {
       height: 100%;
       width: 0%;
@@ -214,13 +285,16 @@
     ::-webkit-scrollbar {
       width: 8px;
     }
+
     ::-webkit-scrollbar-track {
       background: var(--bg);
     }
+
     ::-webkit-scrollbar-thumb {
       background: rgba(99, 74, 186, 0.3);
       border-radius: 4px;
     }
+
     ::-webkit-scrollbar-thumb:hover {
       background: var(--primary);
     }
@@ -248,13 +322,22 @@
       filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
+
     .hidden-gem:hover {
       transform: scale(1.3) rotate(15deg);
       filter: drop-shadow(0 0 15px rgba(217, 70, 239, 1));
     }
+
     @keyframes gemFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(5deg); }
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-8px) rotate(5deg);
+      }
     }
 
     /* Floating Popups */
@@ -268,9 +351,17 @@
       pointer-events: none;
       animation: popupFloat 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
+
     @keyframes popupFloat {
-      0% { opacity: 1; transform: translate(-50%, -50%) translateY(0) scale(0.8); }
-      100% { opacity: 0; transform: translate(-50%, -50%) translateY(-50px) scale(1.3); }
+      0% {
+        opacity: 1;
+        transform: translate(-50%, -50%) translateY(0) scale(0.8);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translateY(-50px) scale(1.3);
+      }
     }
 
     /* Campfire Animation styles */
@@ -280,6 +371,7 @@
       height: 110px;
       margin: 0 auto;
     }
+
     .fire {
       position: absolute;
       bottom: 12px;
@@ -288,6 +380,7 @@
       width: 70px;
       height: 70px;
     }
+
     .flame {
       position: absolute;
       bottom: 0;
@@ -299,6 +392,7 @@
       filter: blur(2px);
       animation: flicker 1.4s ease-in-out infinite alternate;
     }
+
     .flame-1 {
       background: var(--primary);
       z-index: 3;
@@ -307,6 +401,7 @@
       left: 13px;
       animation-duration: 1s;
     }
+
     .flame-2 {
       background: var(--amber);
       z-index: 2;
@@ -315,6 +410,7 @@
       left: 6px;
       animation-duration: 1.4s;
     }
+
     .flame-3 {
       background: #f43f5e;
       z-index: 1;
@@ -323,10 +419,19 @@
       left: 0;
       animation-duration: 1.8s;
     }
+
     @keyframes flicker {
-      0% { transform: rotate(-135deg) scale(0.9) skew(2deg, 2deg); filter: blur(2px); }
-      100% { transform: rotate(-132deg) scale(1.05) translateY(-5px) skew(-2deg, -2deg); filter: blur(3.5px); }
+      0% {
+        transform: rotate(-135deg) scale(0.9) skew(2deg, 2deg);
+        filter: blur(2px);
+      }
+
+      100% {
+        transform: rotate(-132deg) scale(1.05) translateY(-5px) skew(-2deg, -2deg);
+        filter: blur(3.5px);
+      }
     }
+
     .wood-logs {
       position: absolute;
       bottom: 4px;
@@ -336,9 +441,10 @@
       height: 14px;
       background: #78350f;
       border-radius: 6px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
       z-index: 4;
     }
+
     .wood-logs::after {
       content: '';
       position: absolute;
@@ -350,6 +456,7 @@
       border-radius: 6px;
       transform: rotate(12deg);
     }
+
     .ember {
       position: absolute;
       width: 3.5px;
@@ -360,11 +467,25 @@
       opacity: 0;
       animation: floatEmber 3s linear infinite;
     }
+
     @keyframes floatEmber {
-      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 0.6; }
-      100% { transform: translateY(-75px) translateX(var(--x-shift, 15px)) scale(0.4); opacity: 0; }
+      0% {
+        transform: translateY(0) translateX(0) scale(1);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(-75px) translateX(var(--x-shift, 15px)) scale(0.4);
+        opacity: 0;
+      }
     }
 
     /* Foreground Stalactites and Stalagmites styling */
@@ -373,7 +494,7 @@
       fill: #080614;
       pointer-events: none;
       z-index: 8;
-      filter: drop-shadow(0 0 10px rgba(0,0,0,0.9));
+      filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
     }
 
     /* New Realms styles */
@@ -389,9 +510,11 @@
       align-items: center;
       position: relative;
     }
+
     .spinner-strip {
       transition: transform 1.5s cubic-bezier(0.1, 0.8, 0.1, 1);
     }
+
     .spinner-item {
       height: 48px;
       display: flex;
@@ -412,17 +535,23 @@
     })();
   </script>
 </head>
+
 <body class="min-h-screen">
 
   <!-- Parallax Cavern Background -->
   <div id="parallax-bg">
     <!-- Ambient Dust Particles -->
     <div class="dust-particle" style="width: 5px; height: 5px; left: 15%; top: 20%; --x-shift: 25px;"></div>
-    <div class="dust-particle" style="width: 3.5px; height: 3.5px; left: 45%; top: 15%; --x-shift: -20px; animation-delay: 1.5s;"></div>
-    <div class="dust-particle" style="width: 4.5px; height: 4.5px; left: 75%; top: 30%; --x-shift: 30px; animation-delay: 3s;"></div>
-    <div class="dust-particle" style="width: 3.5px; height: 3.5px; left: 25%; top: 75%; --x-shift: -15px; animation-delay: 2.2s;"></div>
-    <div class="dust-particle" style="width: 5px; height: 5px; left: 60%; top: 65%; --x-shift: 20px; animation-delay: 0.7s;"></div>
-    <div class="dust-particle" style="width: 4.5px; height: 4.5px; left: 85%; top: 80%; --x-shift: -25px; animation-delay: 4.5s;"></div>
+    <div class="dust-particle"
+      style="width: 3.5px; height: 3.5px; left: 45%; top: 15%; --x-shift: -20px; animation-delay: 1.5s;"></div>
+    <div class="dust-particle"
+      style="width: 4.5px; height: 4.5px; left: 75%; top: 30%; --x-shift: 30px; animation-delay: 3s;"></div>
+    <div class="dust-particle"
+      style="width: 3.5px; height: 3.5px; left: 25%; top: 75%; --x-shift: -15px; animation-delay: 2.2s;"></div>
+    <div class="dust-particle"
+      style="width: 5px; height: 5px; left: 60%; top: 65%; --x-shift: 20px; animation-delay: 0.7s;"></div>
+    <div class="dust-particle"
+      style="width: 4.5px; height: 4.5px; left: 85%; top: 80%; --x-shift: -25px; animation-delay: 4.5s;"></div>
   </div>
 
   <!-- Fixed Header -->
@@ -430,7 +559,8 @@
     <div class="max-w-7xl mx-auto flex justify-between items-center">
       <a href="#" onclick="scrollToTop(event)" class="flex items-center gap-3 cursor-pointer group">
         <!-- Gem Logo -->
-        <div class="w-10 h-10 bg-gradient-to-br from-[#FF007F] to-[#00FFFF] rounded-xl flex items-center justify-center neon-glow-magenta rotate-3 group-hover:rotate-12 transition-transform duration-300">
+        <div
+          class="w-10 h-10 bg-gradient-to-br from-[#FF007F] to-[#00FFFF] rounded-xl flex items-center justify-center neon-glow-magenta rotate-3 group-hover:rotate-12 transition-transform duration-300">
           <i class="fas fa-gem text-white text-lg"></i>
         </div>
         <div>
@@ -438,13 +568,15 @@
             <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase italic">
               Afterparty <span class="text-[#FF007F] text-glow-magenta">Digital</span>
             </h1>
-            <span class="bg-[#FFB800] text-slate-950 text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm">DESCENT ROUTE</span>
+            <span class="bg-[#FFB800] text-slate-950 text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm">DESCENT
+              ROUTE</span>
           </div>
         </div>
       </a>
-      
+
       <!-- Live Metrics Dashboard -->
-      <div class="flex gap-4 md:gap-6 text-sm bg-slate-950/70 p-2 rounded-xl border border-white/5 font-mono text-[10px]">
+      <div
+        class="flex gap-4 md:gap-6 text-sm bg-slate-950/70 p-2 rounded-xl border border-white/5 font-mono text-[10px]">
         <div class="flex flex-col items-center px-2">
           <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black">Check-Ins</span>
           <span class="font-bold text-[#00FFFF] text-glow-cyan" id="stat-checkins">47</span>
@@ -456,7 +588,8 @@
         </div>
         <div class="h-6 w-px bg-white/10"></div>
         <div class="flex flex-col items-center px-2">
-          <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black font-bold">Sparked Connections</span>
+          <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black font-bold">Sparked
+            Connections</span>
           <span class="font-bold text-[#FF007F] text-glow-magenta" id="stat-matches">0</span>
         </div>
       </div>
@@ -465,27 +598,34 @@
 
   <!-- Diagonal Scroll Container (Translates horizontally and vertically) -->
   <div id="scroll-container">
-    
+
     <!-- Dynamic SVG Railroad Track -->
-    <svg id="rail-svg" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 5;" viewBox="0 0 6000 4200" preserveAspectRatio="none">
+    <svg id="rail-svg" class="absolute top-0 left-0 w-full h-full pointer-events-none" style="z-index: 5;"
+      viewBox="0 0 6000 4200" preserveAspectRatio="none">
       <!-- Dark track shadow bed -->
-      <path d="M 50,800 L 5850,3800" stroke="rgba(4, 3, 10, 0.3)" stroke-width="32" stroke-linecap="round" fill="none" />
-      
+      <path d="M 50,800 L 5850,3800" stroke="rgba(4, 3, 10, 0.3)" stroke-width="32" stroke-linecap="round"
+        fill="none" />
+
       <!-- Sleeper group (dynamically populated by JS) -->
       <g id="sleepers-group"></g>
-      
+
       <!-- Steel Rails -->
       <!-- Left Rail -->
-      <path d="M 50,800 L 5850,3800" transform="translate(-5, 12)" stroke="#475569" stroke-width="4.5" stroke-linecap="round" fill="none" class="drop-shadow-[0_0_8px_rgba(148,163,184,0.3)]" />
-      <path d="M 50,800 L 5850,3800" transform="translate(-5, 12)" stroke="#cbd5e1" stroke-width="1.8" stroke-linecap="round" fill="none" />
+      <path d="M 50,800 L 5850,3800" transform="translate(-5, 12)" stroke="#475569" stroke-width="4.5"
+        stroke-linecap="round" fill="none" class="drop-shadow-[0_0_8px_rgba(148,163,184,0.3)]" />
+      <path d="M 50,800 L 5850,3800" transform="translate(-5, 12)" stroke="#cbd5e1" stroke-width="1.8"
+        stroke-linecap="round" fill="none" />
       <!-- Right Rail -->
-      <path d="M 50,800 L 5850,3800" transform="translate(5, -12)" stroke="#475569" stroke-width="4.5" stroke-linecap="round" fill="none" class="drop-shadow-[0_0_8px_rgba(148,163,184,0.3)]" />
-      <path d="M 50,800 L 5850,3800" transform="translate(5, -12)" stroke="#cbd5e1" stroke-width="1.8" stroke-linecap="round" fill="none" />
+      <path d="M 50,800 L 5850,3800" transform="translate(5, -12)" stroke="#475569" stroke-width="4.5"
+        stroke-linecap="round" fill="none" class="drop-shadow-[0_0_8px_rgba(148,163,184,0.3)]" />
+      <path d="M 50,800 L 5850,3800" transform="translate(5, -12)" stroke="#cbd5e1" stroke-width="1.8"
+        stroke-linecap="round" fill="none" />
     </svg>
-    
+
     <!-- Hidden Gemstones (Easter Eggs) -->
     <!-- Gem 1 (Launch room top right) -->
-    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 88vw; top: 12vh;" title="Hidden Amethyst">
+    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 88vw; top: 12vh;"
+      title="Hidden Amethyst">
       <svg viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">
         <polygon points="50,10 80,35 80,65 50,90 20,65 20,35" fill="#c084fc" />
         <polygon points="50,10 50,90 20,65" fill="rgba(255,255,255,0.25)" />
@@ -493,7 +633,8 @@
       </svg>
     </div>
     <!-- Gem 2 (Amethyst mine floor) -->
-    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 104vw; top: 82vh;" title="Hidden Amethyst">
+    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 104vw; top: 82vh;"
+      title="Hidden Amethyst">
       <svg viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">
         <polygon points="50,10 80,35 80,65 50,90 20,65 20,35" fill="#c084fc" />
         <polygon points="50,10 50,90 20,65" fill="rgba(255,255,255,0.25)" />
@@ -501,17 +642,19 @@
       </svg>
     </div>
     <!-- Gem 3 (Campfire logs area top left) -->
-    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 205vw; top: 135vh;" title="Hidden Amethyst">
+    <div class="hidden-gem" onclick="collectHiddenGem(this, event)" style="left: 205vw; top: 135vh;"
+      title="Hidden Amethyst">
       <svg viewBox="0 0 100 100" class="w-10 h-10 drop-shadow-[0_0_8px_rgba(168,85,247,0.7)]">
         <polygon points="50,10 80,35 80,65 50,90 20,65 20,35" fill="#c084fc" />
         <polygon points="50,10 50,90 20,65" fill="rgba(255,255,255,0.25)" />
         <polygon points="50,10 80,35 50,50" fill="rgba(255,255,255,0.35)" />
       </svg>
     </div>
-    
+
     <!-- Minecart moving inside scroll coordinates -->
     <div id="cart-container" class="minecart-goose" style="left: 5vw; top: 80vh;">
-      <img src="./crystal_goose.png" alt="Minecart Goose" class="w-16 h-16 object-contain" onerror="this.src='https://miaoda-preview-img.cdn.bcebos.com/preview.png'">
+      <img src="./crystal_goose.png" alt="Minecart Goose" class="w-16 h-16 object-contain"
+        onerror="this.src='https://miaoda-preview-img.cdn.bcebos.com/preview.png'">
     </div>
 
     <!-- Realm 1: Launch Cavern -->
@@ -524,7 +667,7 @@
             <span class="text-gold-gradient text-4xl md:text-5xl text-glow-magenta">Launch Room</span>
           </h2>
           <p class="text-[11px] text-gray-400 leading-relaxed font-mono">
-            Launch a party, scan the portal access code, and explore developer souls in the deep caverns. 
+            Launch a party, scan the portal access code, and explore developer souls in the deep caverns.
             Scroll down to descend into the Amethyst Networking Mine.
           </p>
           <div class="flex items-center gap-2 text-xs font-bold text-[#00FFFF] animate-bounce">
@@ -534,30 +677,32 @@
 
         <!-- Form Console Panel (col-span-4) -->
         <div class="lg:col-span-4">
-          <div class="glass-panel p-5 rounded-3xl space-y-4 relative overflow-hidden border-t-2 border-[#FF007F]/60 shadow-lg">
+          <div
+            class="glass-panel p-5 rounded-3xl space-y-4 relative overflow-hidden border-t-2 border-[#FF007F]/60 shadow-lg">
             <h3 class="text-xs font-black uppercase tracking-widest text-[#FF007F] flex items-center gap-2">
               <i class="fas fa-fire-flame-curved animate-pulse"></i> Deploy Cavern Shaft
             </h3>
             <form id="event-form" class="space-y-3 font-mono text-[9px]">
               <div>
                 <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Cavern Name</label>
-                <input type="text" id="event-name" required placeholder="Midnight Hackers Cavern" 
+                <input type="text" id="event-name" required placeholder="Midnight Hackers Cavern"
                   class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
               </div>
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Launch Time</label>
-                  <input type="text" id="event-time" required placeholder="Tonight, 10 PM" 
+                  <input type="text" id="event-time" required placeholder="Tonight, 10 PM"
                     class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
                 </div>
                 <div>
                   <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Capacity</label>
-                  <input type="number" id="event-max" required placeholder="100" 
+                  <input type="number" id="event-max" required placeholder="100"
                     class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
                 </div>
               </div>
               <input type="hidden" id="event-location" value="The Amethyst Cave">
-              <button type="submit" class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
+              <button type="submit"
+                class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
                 IGNITE CAVERN EVENT
               </button>
             </form>
@@ -566,7 +711,8 @@
 
         <!-- Active Caverns List (col-span-3) -->
         <div class="lg:col-span-3">
-          <div class="glass-panel p-5 rounded-3xl border-t-2 border-[#FFB800]/60 space-y-3 h-[250px] flex flex-col justify-between shadow-lg">
+          <div
+            class="glass-panel p-5 rounded-3xl border-t-2 border-[#FFB800]/60 space-y-3 h-[250px] flex flex-col justify-between shadow-lg">
             <h3 class="text-xs font-black uppercase tracking-widest text-[#FFB800] flex items-center gap-2">
               <i class="fas fa-list-ul"></i> Active Caverns
             </h3>
@@ -578,7 +724,8 @@
                   <span><i class="fas fa-users mr-0.5"></i> 47/100</span>
                 </div>
                 <h4 class="text-[11px] font-black uppercase tracking-tight text-white">Midnight Hackers Cavern</h4>
-                <p class="text-[8px] text-gray-500 font-mono"><i class="fas fa-map-marker-alt mr-0.5"></i> The Amethyst Cave • Active Now</p>
+                <p class="text-[8px] text-gray-500 font-mono"><i class="fas fa-map-marker-alt mr-0.5"></i> The Amethyst
+                  Cave • Active Now</p>
               </div>
             </div>
           </div>
@@ -586,53 +733,62 @@
 
         <!-- Check-in Portal QR (col-span-2) -->
         <div class="lg:col-span-2 flex flex-col items-center">
-          <div class="glass-panel p-4 rounded-3xl flex flex-col items-center text-center space-y-3 border-t-2 border-[#00FFFF]/60 shadow-lg">
+          <div
+            class="glass-panel p-4 rounded-3xl flex flex-col items-center text-center space-y-3 border-t-2 border-[#00FFFF]/60 shadow-lg">
             <span class="text-[8px] font-black uppercase tracking-widest text-gray-400 font-mono">PORTAL QR</span>
             <div class="bg-white p-1.5 rounded-xl shadow-lg rotate-1 hover:rotate-0 transition-transform">
-               <img src="https://api.qrserver.com/v1/create-qr-code/?size=100&data=AfterpartyDigital&color=0A0A0A" alt="QR" class="w-20 h-20">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=100&data=AfterpartyDigital&color=0A0A0A"
+                alt="QR" class="w-20 h-20">
             </div>
             <p class="text-[7px] text-gray-500 font-mono">SCAN TO ENTER</p>
           </div>
         </div>
       </div>
     </section>
-    
+
     <!-- Realm 2: Amethyst Networking Mine -->
     <section class="realm px-8 md:px-20" id="realm-2">
       <div class="max-w-6xl mx-auto w-full space-y-6">
         <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-4 gap-4">
+        <div
+          class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-4 gap-4">
           <div>
             <h2 class="text-3xl font-black uppercase tracking-tight italic">
               Amethyst <span class="text-[#00FFFF] text-glow-cyan text-4xl">Networking Mine</span>
             </h2>
             <p class="text-xs text-gray-400 mt-1 font-mono">Filter and search developers inside this active cavern.</p>
           </div>
-          
+
           <!-- Live Filter & Search Controls -->
           <div class="flex flex-wrap items-center gap-2 w-full md:w-auto font-mono text-[10px]">
-            <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search developers..." 
+            <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search developers..."
               class="bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF] w-40">
             <div class="flex gap-1 bg-slate-950 p-1 rounded-xl border border-white/5">
-              <button onclick="filterRole('all')" class="px-3 py-1 rounded-lg bg-slate-800 text-white font-bold" id="btn-filter-all">ALL</button>
-              <button onclick="filterRole('AI')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold" id="btn-filter-AI">AI</button>
-              <button onclick="filterRole('Dev')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold" id="btn-filter-Dev">DEVS</button>
-              <button onclick="filterRole('Design')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold" id="btn-filter-Design">DESIGN</button>
+              <button onclick="filterRole('all')" class="px-3 py-1 rounded-lg bg-slate-800 text-white font-bold"
+                id="btn-filter-all">ALL</button>
+              <button onclick="filterRole('AI')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+                id="btn-filter-AI">AI</button>
+              <button onclick="filterRole('Dev')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+                id="btn-filter-Dev">DEVS</button>
+              <button onclick="filterRole('Design')"
+                class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+                id="btn-filter-Design">DESIGN</button>
             </div>
           </div>
         </div>
 
         <!-- Attendee gallery -->
-        <div id="attendee-gallery" class="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-y-auto max-h-[440px] pr-1 custom-scrollbar">
+        <div id="attendee-gallery"
+          class="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-y-auto max-h-[440px] pr-1 custom-scrollbar">
           <!-- JS will populate this -->
         </div>
       </div>
     </section>
-    
+
     <!-- Realm 3: Crystal Campfire & Mini-Game -->
     <section class="realm px-8 md:px-20" id="realm-3">
       <div class="max-w-6xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-        
+
         <!-- Left: upcoming events + Chat Board -->
         <div class="md:col-span-5 space-y-4">
           <div class="space-y-1">
@@ -661,25 +817,32 @@
           <div class="glass-panel rounded-2xl border border-white/10 p-4 space-y-4 shadow-lg">
             <div id="chat-board" class="space-y-2 max-h-[150px] overflow-y-auto font-mono text-[10px] custom-scrollbar">
               <!-- Pre-populated chat notes -->
-              <div class="border-b border-white/5 pb-1"><span class="text-[#00FFFF]">Alex:</span> Does anyone have a spare USB-C cable?</div>
-              <div class="border-b border-white/5 pb-1"><span class="text-[#FFB800]">Taylor:</span> Amethyst crystals are glowing bright!</div>
-              <div class="border-b border-white/5 pb-1"><span class="text-[#FF007F]">Jamie:</span> Replicating Hack the North 2025 visuals.</div>
+              <div class="border-b border-white/5 pb-1"><span class="text-[#00FFFF]">Alex:</span> Does anyone have a
+                spare USB-C cable?</div>
+              <div class="border-b border-white/5 pb-1"><span class="text-[#FFB800]">Taylor:</span> Amethyst crystals
+                are glowing bright!</div>
+              <div class="border-b border-white/5 pb-1"><span class="text-[#FF007F]">Jamie:</span> Replicating Hack the
+                North 2025 visuals.</div>
             </div>
-            
+
             <form id="chat-form" onsubmit="sendChat(event)" class="flex gap-2">
-              <input type="text" id="chat-input" placeholder="Say something..." required 
+              <input type="text" id="chat-input" placeholder="Say something..." required
                 class="flex-grow bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#FFB800]">
-              <button type="submit" class="px-4 py-2 bg-gradient-to-r from-[#FFB800] to-amber-600 text-slate-950 rounded-xl font-black uppercase tracking-widest text-[9px] hover:shadow-[0_0_12px_rgba(255,184,0,0.5)] transition-shadow">
+              <button type="submit"
+                class="px-4 py-2 bg-gradient-to-r from-[#FFB800] to-amber-600 text-slate-950 rounded-xl font-black uppercase tracking-widest text-[9px] hover:shadow-[0_0_12px_rgba(255,184,0,0.5)] transition-shadow">
                 SPARK
               </button>
             </form>
           </div>
 
           <div class="glass-panel p-3.5 rounded-2xl border border-white/5 space-y-2.5">
-            <span class="block uppercase tracking-widest text-[#FF007F] font-black text-[7px] text-left font-mono">Capture Flash Moment</span>
-            <input type="text" id="photo-url-input" placeholder="Paste custom image URL (optional)" 
+            <span
+              class="block uppercase tracking-widest text-[#FF007F] font-black text-[7px] text-left font-mono">Capture
+              Flash Moment</span>
+            <input type="text" id="photo-url-input" placeholder="Paste custom image URL (optional)"
               class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-[9px] text-white focus:outline-none focus:border-[#FF007F] font-mono placeholder-gray-500">
-            <button onclick="handleUpload()" class="btn-adventure w-full py-2.5 rounded-xl font-black uppercase tracking-widest text-[9px] text-white">
+            <button onclick="handleUpload()"
+              class="btn-adventure w-full py-2.5 rounded-xl font-black uppercase tracking-widest text-[9px] text-white">
               <i class="fas fa-camera mr-1"></i> Capture Moment
             </button>
           </div>
@@ -687,14 +850,17 @@
 
         <!-- Center/Right: Gem Clicker Game + Photo Wall -->
         <div class="md:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           <!-- Crystal clicker game panel with Shop -->
-          <div class="glass-panel p-5 rounded-3xl border border-white/10 space-y-4 flex flex-col items-center justify-between text-center relative overflow-hidden h-[420px] shadow-lg">
+          <div
+            class="glass-panel p-5 rounded-3xl border border-white/10 space-y-4 flex flex-col items-center justify-between text-center relative overflow-hidden h-[420px] shadow-lg">
             <h3 class="text-xs font-black uppercase tracking-widest text-gold-gradient">Amethyst Mining Arena</h3>
-            
+
             <!-- Shaking Gemstone SVG click target -->
-            <div class="w-20 h-20 flex items-center justify-center cursor-pointer gem-clicker relative" onclick="mineGem(event)">
-              <svg viewBox="0 0 100 100" class="w-full h-full drop-shadow-[0_0_15px_rgba(168,85,247,0.7)] animate-pulse">
+            <div class="w-20 h-20 flex items-center justify-center cursor-pointer gem-clicker relative"
+              onclick="mineGem(event)">
+              <svg viewBox="0 0 100 100"
+                class="w-full h-full drop-shadow-[0_0_15px_rgba(168,85,247,0.7)] animate-pulse">
                 <polygon points="50,10 80,30 80,70 50,90 20,70 20,30" fill="url(#gem-grad)" />
                 <polygon points="50,10 50,90 20,70" fill="rgba(255,255,255,0.1)" />
                 <polygon points="50,10 80,30 50,50" fill="rgba(255,255,255,0.15)" />
@@ -708,7 +874,7 @@
                 </defs>
               </svg>
             </div>
-            
+
             <!-- Rank & Progress Bar -->
             <div class="w-full font-mono text-[9px] space-y-1.5">
               <div class="flex justify-between items-center text-[10px]">
@@ -720,27 +886,34 @@
                 <div id="mining-progress" class="mining-progress-bar"></div>
               </div>
             </div>
-            
+
             <!-- Upgrades Shop -->
             <div class="w-full space-y-1.5 font-mono text-[8px] bg-slate-950/60 p-2.5 rounded-xl border border-white/5">
-              <span class="block uppercase tracking-widest text-[#FF007F] font-black text-[7px] text-left mb-1">MINE SHAFTS SHOP</span>
-              
+              <span class="block uppercase tracking-widest text-[#FF007F] font-black text-[7px] text-left mb-1">MINE
+                SHAFTS SHOP</span>
+
               <!-- Upgrade 1: Steel Pickaxe -->
-              <div class="flex justify-between items-center bg-white/5 p-1 px-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
+              <div
+                class="flex justify-between items-center bg-white/5 p-1 px-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors">
                 <div class="text-left">
                   <span class="text-white font-bold block text-[9px]">Steel Pickaxe</span>
                   <span class="text-gray-400">+2 crystals/click</span>
                 </div>
-                <button onclick="buyUpgrade('pickaxe', 15, event)" id="btn-upgrade-pickaxe" class="px-2 py-1 bg-[#FF007F] text-white font-black rounded hover:opacity-90 transition-opacity">15 💎</button>
+                <button onclick="buyUpgrade('pickaxe', 15, event)" id="btn-upgrade-pickaxe"
+                  class="px-2 py-1 bg-[#FF007F] text-white font-black rounded hover:opacity-90 transition-opacity">15
+                  💎</button>
               </div>
 
               <!-- Upgrade 2: Goose Helper -->
-              <div class="flex justify-between items-center bg-white/5 p-1 px-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors mt-1">
+              <div
+                class="flex justify-between items-center bg-white/5 p-1 px-2 rounded-lg border border-white/5 hover:bg-white/10 transition-colors mt-1">
                 <div class="text-left">
                   <span class="text-white font-bold block text-[9px]">Goose Miner</span>
                   <span class="text-gray-400">+1 crystal/sec</span>
                 </div>
-                <button onclick="buyUpgrade('miner', 50, event)" id="btn-upgrade-miner" class="px-2 py-1 bg-[#FF007F] text-white font-black rounded hover:opacity-90 transition-opacity">50 💎</button>
+                <button onclick="buyUpgrade('miner', 50, event)" id="btn-upgrade-miner"
+                  class="px-2 py-1 bg-[#FF007F] text-white font-black rounded hover:opacity-90 transition-opacity">50
+                  💎</button>
               </div>
             </div>
             <p class="text-[8px] text-gray-500 font-mono">EXTRACT POWER & HIRE COMPANIONS</p>
@@ -748,12 +921,17 @@
 
           <!-- Photo Wall -->
           <div class="space-y-4">
-            <h3 class="text-xs font-black uppercase tracking-widest text-[#FFB800] text-right font-mono">Live Photo Wall</h3>
+            <h3 class="text-xs font-black uppercase tracking-widest text-[#FFB800] text-right font-mono">Live Photo Wall
+            </h3>
             <div class="grid grid-cols-1 gap-4" id="photo-wall">
-              <div class="aspect-video rounded-2xl overflow-hidden glass-panel group cursor-pointer relative border border-white/5 shadow-md">
-                <img src="https://images.unsplash.com/photo-1514525253361-bee8a18744ad?w=400&h=300&fit=crop" class="w-full h-full object-cover opacity-50 group-hover:opacity-90 group-hover:scale-105 transition-all duration-300">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <span class="text-white text-[9px] font-mono font-bold"><i class="fas fa-heart text-[#FF007F] mr-1"></i> 32 Likes</span>
+              <div
+                class="aspect-video rounded-2xl overflow-hidden glass-panel group cursor-pointer relative border border-white/5 shadow-md">
+                <img src="https://images.unsplash.com/photo-1514525253361-bee8a18744ad?w=400&h=300&fit=crop"
+                  class="w-full h-full object-cover opacity-50 group-hover:opacity-90 group-hover:scale-105 transition-all duration-300">
+                <div
+                  class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex flex-col justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span class="text-white text-[9px] font-mono font-bold"><i
+                      class="fas fa-heart text-[#FF007F] mr-1"></i> 32 Likes</span>
                 </div>
               </div>
             </div>
@@ -763,7 +941,7 @@
       </div>
     </section>
 
-  
+
     <!-- Realm 4: The Alliance Forge -->
     <section class="realm px-8 md:px-20" id="realm-4">
       <div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
@@ -782,20 +960,21 @@
             <form id="team-form" onsubmit="createTeam(event)" class="space-y-3 font-mono text-[9px]">
               <div>
                 <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Project Name</label>
-                <input type="text" id="team-name" required placeholder="Nova Cyber Cavern" 
+                <input type="text" id="team-name" required placeholder="Nova Cyber Cavern"
                   class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
               </div>
               <div>
                 <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Looking For</label>
-                <input type="text" id="team-looking" required placeholder="AI Specialist, UX Designer" 
+                <input type="text" id="team-looking" required placeholder="AI Specialist, UX Designer"
                   class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
               </div>
               <div>
                 <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Core Tech</label>
-                <input type="text" id="team-tech" required placeholder="Next.js, Python, Tailwind" 
+                <input type="text" id="team-tech" required placeholder="Next.js, Python, Tailwind"
                   class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
               </div>
-              <button type="submit" class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
+              <button type="submit"
+                class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
                 FORGE ALLIANCE TEAM
               </button>
             </form>
@@ -807,25 +986,38 @@
           <h3 class="text-xs font-black uppercase tracking-widest text-[#FF007F] font-mono flex items-center gap-2">
             <i class="fas fa-network-wired"></i> Available Alliances
           </h3>
-          <div id="teams-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
+          <div id="teams-container"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
             <!-- Team 1 -->
             <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
-              <span class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">2/4 Members</span>
+              <span
+                class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">2/4
+                Members</span>
               <h4 class="text-sm font-black text-white uppercase tracking-tight">Cyber Stalactite Systems</h4>
-              <p class="text-[9px] text-gray-400 font-mono">Building decentralized sensor grids inside cavern shafts.</p>
-              <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: Rust Engineer, Data Viz</div>
+              <p class="text-[9px] text-gray-400 font-mono">Building decentralized sensor grids inside cavern shafts.
+              </p>
+              <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: Rust
+                Engineer, Data Viz</div>
               <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
-                <button onclick="requestToJoinTeam(this, event)" class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send Inquiry</button>
+                <button onclick="requestToJoinTeam(this, event)"
+                  class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send
+                  Inquiry</button>
               </div>
             </div>
             <!-- Team 2 -->
             <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
-              <span class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">3/4 Members</span>
+              <span
+                class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">3/4
+                Members</span>
               <h4 class="text-sm font-black text-white uppercase tracking-tight">GeoAmethyst AI</h4>
-              <p class="text-[9px] text-gray-400 font-mono">Mapping crystal growth layers using neural vision models.</p>
-              <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: UX Designer</div>
+              <p class="text-[9px] text-gray-400 font-mono">Mapping crystal growth layers using neural vision models.
+              </p>
+              <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: UX
+                Designer</div>
               <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
-                <button onclick="requestToJoinTeam(this, event)" class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send Inquiry</button>
+                <button onclick="requestToJoinTeam(this, event)"
+                  class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send
+                  Inquiry</button>
               </div>
             </div>
           </div>
@@ -844,12 +1036,12 @@
             </h2>
             <p class="text-xs text-gray-400 font-mono">Ignite custom hackathon concepts using our matrix spinner.</p>
           </div>
-          
+
           <div class="glass-panel p-5 rounded-3xl border-t-2 border-[#FFB800]/60 space-y-3 shadow-lg">
             <h3 class="text-xs font-black uppercase tracking-widest text-[#FFB800] flex items-center gap-2">
               <i class="fas fa-dice"></i> Spinner Slots
             </h3>
-            
+
             <div class="grid grid-cols-3 gap-2 font-mono">
               <div>
                 <span class="block uppercase tracking-widest text-gray-500 text-[7px] text-center mb-1">TECH</span>
@@ -863,7 +1055,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <span class="block uppercase tracking-widest text-gray-500 text-[7px] text-center mb-1">REALM</span>
                 <div class="spinner-slot">
@@ -876,7 +1068,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <div>
                 <span class="block uppercase tracking-widest text-gray-500 text-[7px] text-center mb-1">GOAL</span>
                 <div class="spinner-slot">
@@ -891,7 +1083,8 @@
               </div>
             </div>
 
-            <button onclick="spinDials(event)" class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
+            <button onclick="spinDials(event)"
+              class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
               ROLL IDEA DIALS <i class="fas fa-sync-alt ml-1"></i>
             </button>
           </div>
@@ -899,17 +1092,24 @@
 
         <!-- Result Screen (col-span-7) -->
         <div class="lg:col-span-7">
-          <div class="glass-panel p-6 rounded-3xl border border-white/10 h-[240px] flex flex-col justify-between shadow-lg relative overflow-hidden">
+          <div
+            class="glass-panel p-6 rounded-3xl border border-white/10 h-[240px] flex flex-col justify-between shadow-lg relative overflow-hidden">
             <div class="absolute -top-24 -left-24 w-48 h-48 bg-[#FFB800]/5 blur-3xl rounded-full"></div>
             <div>
-              <span class="text-[8px] font-black uppercase tracking-widest text-gray-500 font-mono">ORACLE PROJECT PROMPT</span>
-              <h3 class="text-xl md:text-2xl font-black text-white uppercase tracking-tight italic mt-2 text-glow-magenta" id="idea-title">Spin to Generate</h3>
+              <span class="text-[8px] font-black uppercase tracking-widest text-gray-500 font-mono">ORACLE PROJECT
+                PROMPT</span>
+              <h3
+                class="text-xl md:text-2xl font-black text-white uppercase tracking-tight italic mt-2 text-glow-magenta"
+                id="idea-title">Spin to Generate</h3>
               <p class="text-[11px] text-gray-400 leading-relaxed font-mono mt-3" id="idea-desc">
-                Roll the dials to spark a randomized hackathon project idea mapped using combinations of advanced technologies, industry realms, and product goals.
+                Roll the dials to spark a randomized hackathon project idea mapped using combinations of advanced
+                technologies, industry realms, and product goals.
               </p>
             </div>
-            <div class="flex items-center justify-between pt-4 border-t border-white/5 font-mono text-[9px] text-gray-500">
-              <span>ESTIMATED FEASIBILITY: <span class="text-green-400 font-bold" id="idea-feasibility">N/A</span></span>
+            <div
+              class="flex items-center justify-between pt-4 border-t border-white/5 font-mono text-[9px] text-gray-500">
+              <span>ESTIMATED FEASIBILITY: <span class="text-green-400 font-bold"
+                  id="idea-feasibility">N/A</span></span>
               <span>COMPLEXITY: <span class="text-[#00FFFF] font-bold" id="idea-complexity">N/A</span></span>
             </div>
           </div>
@@ -924,7 +1124,8 @@
           <h2 class="text-3xl font-black uppercase tracking-tight italic">
             Sponsor <span class="text-[#FF007F] text-4xl">Bounty Board</span>
           </h2>
-          <p class="text-xs text-gray-400 mt-1 font-mono">Integrate sponsor APIs and claim high-value bounty rewards.</p>
+          <p class="text-xs text-gray-400 mt-1 font-mono">Integrate sponsor APIs and claim high-value bounty rewards.
+          </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -935,8 +1136,11 @@
               <span class="text-xs font-black text-white font-mono">$1,000</span>
             </div>
             <h4 class="text-sm font-black text-white uppercase">Most Creative Agent</h4>
-            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Build a generative assistant that automates complex cavern navigation or networking connections.</p>
-            <span class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">GPT-4o / Realtime API</span>
+            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Build a generative assistant that automates
+              complex cavern navigation or networking connections.</p>
+            <span
+              class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">GPT-4o
+              / Realtime API</span>
           </div>
 
           <!-- Prize 2 -->
@@ -946,8 +1150,11 @@
               <span class="text-xs font-black text-white font-mono">$750</span>
             </div>
             <h4 class="text-sm font-black text-white uppercase">Best Data Architecture</h4>
-            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Design a database schema utilizing Atlas Vector Search to index developer check-ins and matchmaking.</p>
-            <span class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">MongoDB Atlas / Search</span>
+            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Design a database schema utilizing Atlas
+              Vector Search to index developer check-ins and matchmaking.</p>
+            <span
+              class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">MongoDB
+              Atlas / Search</span>
           </div>
 
           <!-- Prize 3 -->
@@ -957,45 +1164,58 @@
               <span class="text-xs font-black text-white font-mono">$500</span>
             </div>
             <h4 class="text-sm font-black text-white uppercase">Best Deployment Flow</h4>
-            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Deploy a low-latency event landing page with Edge functions and clean visual responsiveness.</p>
-            <span class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">Next.js Edge / Vercel KV</span>
+            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Deploy a low-latency event landing page with
+              Edge functions and clean visual responsiveness.</p>
+            <span
+              class="inline-block text-[8px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full font-mono text-gray-400">Next.js
+              Edge / Vercel KV</span>
           </div>
 
           <!-- Prize 4 -->
-          <div class="glass-panel p-5 rounded-2xl border-t-4 border-[#FF007F] card-adventure space-y-3 bg-gradient-to-br from-[#FF007F]/10 to-transparent">
+          <div
+            class="glass-panel p-5 rounded-2xl border-t-4 border-[#FF007F] card-adventure space-y-3 bg-gradient-to-br from-[#FF007F]/10 to-transparent">
             <div class="flex justify-between items-start">
               <span class="text-[9px] font-black uppercase tracking-widest text-[#FF007F] font-mono">AFTERPARTY</span>
               <span class="text-xs font-black text-[#FFB800] font-mono">$1,200</span>
             </div>
             <h4 class="text-sm font-black text-white uppercase">Cavern Network Award</h4>
-            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Granted to the team that sparks the highest count of matches and check-ins during the afterparty hours.</p>
-            <span class="inline-block text-[8px] bg-[#FF007F]/20 border border-[#FF007F]/40 px-2 py-0.5 rounded-full font-mono text-white">Afterparty Digital SDK</span>
+            <p class="text-[9px] text-gray-400 font-mono leading-relaxed">Granted to the team that sparks the highest
+              count of matches and check-ins during the afterparty hours.</p>
+            <span
+              class="inline-block text-[8px] bg-[#FF007F]/20 border border-[#FF007F]/40 px-2 py-0.5 rounded-full font-mono text-white">Afterparty
+              Digital SDK</span>
           </div>
         </div>
       </div>
     </section>
-</div>
+  </div>
 
   <!-- Pinned mini-footer -->
-  <footer class="fixed bottom-4 left-0 right-0 z-30 text-center text-gray-600 text-[10px] tracking-widest font-mono pointer-events-none">
+  <footer
+    class="fixed bottom-4 left-0 right-0 z-30 text-center text-gray-600 text-[10px] tracking-widest font-mono pointer-events-none">
     AFTERPARTY.DIGITAL • 2026 • CAUTIONS: GEMSTONE EXPLOSION RISK 🥂
   </footer>
 
   <!-- Icebreaker Portal Modal -->
   <div id="icebreaker-modal" class="modal-overlay">
-    <div class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#00FFFF]/70">
+    <div
+      class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#00FFFF]/70">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#00FFFF]/10 blur-3xl rounded-full"></div>
-      
-      <div class="w-14 h-14 bg-[#00FFFF]/10 text-[#00FFFF] rounded-full flex items-center justify-center mx-auto text-xl border border-[#00FFFF]/30">
+
+      <div
+        class="w-14 h-14 bg-[#00FFFF]/10 text-[#00FFFF] rounded-full flex items-center justify-center mx-auto text-xl border border-[#00FFFF]/30">
         <i class="fas fa-comment-dots animate-bounce"></i>
       </div>
-      
+
       <div class="space-y-3">
-        <h3 class="text-[#00FFFF] uppercase text-[9px] tracking-widest font-black" id="icebreaker-name">Icebreaker Dialogue</h3>
-        <p class="text-base font-bold italic text-white" id="icebreaker-text">"Ask Alex about their favorite Python framework!"</p>
+        <h3 class="text-[#00FFFF] uppercase text-[9px] tracking-widest font-black" id="icebreaker-name">Icebreaker
+          Dialogue</h3>
+        <p class="text-base font-bold italic text-white" id="icebreaker-text">"Ask Alex about their favorite Python
+          framework!"</p>
       </div>
-      
-      <button onclick="closeModal()" class="w-full py-3 bg-gradient-to-r from-[#00FFFF] to-cyan-600 text-slate-950 font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(0,255,255,0.4)]">
+
+      <button onclick="closeModal()"
+        class="w-full py-3 bg-gradient-to-r from-[#00FFFF] to-cyan-600 text-slate-950 font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(0,255,255,0.4)]">
         DISCOVERY CONFIRMED
       </button>
     </div>
@@ -1023,11 +1243,11 @@
       const dy = endY - startY;
       const L = Math.sqrt(dx * dx + dy * dy);
       const numSleepers = Math.floor(L / 32); // density of ties
-      
+
       // Perpendicular vector for 15px sleeper width
       const px = -dy / L * 15;
       const py = dx / L * 15;
-      
+
       let sleepersHTML = '';
       for (let i = 0; i <= numSleepers; i++) {
         const t = i / numSleepers;
@@ -1043,13 +1263,13 @@
       const scrollY = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const scrollPercent = Math.min(1, Math.max(0, scrollY / maxScroll));
-      
+
       // Translate container sideways and downwards across 6 realms (500vw horizontal, 300vh vertical)
       const container = document.getElementById('scroll-container');
       const translateX = -scrollPercent * 500; // 500vw horizontal panning
       const translateY = -scrollPercent * 300; // 300vh vertical panning
       container.style.transform = `translate(${translateX}vw, ${translateY}vh)`;
-      
+
       // Parallax background translation (at 30% speed, matched to background sizing)
       const pBg = document.getElementById('parallax-bg');
       if (pBg) {
@@ -1098,8 +1318,7 @@
       ? 'http://localhost:3000'
       : 'https://d1mjg93qeqleyh.cloudfront.net';
 
-    let socket;
-    window.onload = function() {
+    window.onload = function () {
       generateRailroadTies();
       updateMiningUI();
       renderAttendees();
@@ -1175,16 +1394,43 @@
       }
     }
 
-    function appendChatMessage(name, msg) {
-      const board = document.getElementById('chat-board');
-      const chatBubble = document.createElement('div');
-      chatBubble.className = 'border-b border-white/5 pb-1';
-      const isMe = name === currentUser;
-      const color = isMe ? '#FF007F' : '#00FFFF';
-      const displayName = isMe ? 'You' : name;
-      chatBubble.innerHTML = `<span style="color: ${color}">${displayName}:</span> ${msg}`;
-      board.appendChild(chatBubble);
-      board.scrollTop = board.scrollHeight;
+    // Handle Join Event
+    function handleJoin(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const input = document.getElementById('join-username');
+      const username = input ? input.value.trim() : '';
+
+      console.log('Join attempted with username:', username);
+
+      if (!username) {
+        console.warn('No username provided');
+        return;
+      }
+
+      currentUser = username;
+
+      // Hide the modal
+      const modal = document.getElementById('join-modal');
+      if (modal) {
+        modal.style.display = 'none';
+        console.log('Modal hidden');
+      }
+
+      // Join room via socket
+      if (socket && socket.connected) {
+        socket.emit('join', currentUser);
+        console.log('Join event emitted');
+      } else {
+        console.warn('Socket not connected, attempting to connect...');
+        setupSocket();
+        setTimeout(() => {
+          if (socket && socket.connected) {
+            socket.emit('join', currentUser);
+          }
+        }, 500);
+      }
     }
 
     // Dynamic developer profiles mappings
@@ -1204,7 +1450,7 @@
       }
       const index = Math.abs(hash) % roles.length;
       const r = roles[index];
-      
+
       const bios = [
         "Python, PyTorch, Agentic workflows",
         "Figma design systems, premium UI layout",
@@ -1214,7 +1460,7 @@
         "Kubernetes cluster provisioning, PM2 logs"
       ];
       const bio = bios[index];
-      
+
       return {
         role: r.role,
         icon: r.icon,
@@ -1227,15 +1473,15 @@
 
     function updateLeaderboardAndAttendees(usersList) {
       onlineUsers = usersList;
-      
+
       // Update Header Metrics
       document.getElementById('stat-checkins').innerText = usersList.length;
       const onlineCountEl = document.getElementById('online-count');
       if (onlineCountEl) onlineCountEl.innerText = usersList.length;
-      
+
       // Sort users by gems descending
       usersList.sort((a, b) => b.gems - a.gems);
-      
+
       // Render in attendee gallery
       renderAttendees();
     }
@@ -1259,7 +1505,7 @@
         const profile = getDeveloperProfile(user.name);
         const isCurrentUser = user.name === currentUser;
         const isLeader = index === 0 && user.gems > 0;
-        
+
         return `
           <div class="glass-panel p-5 rounded-2xl card-adventure relative group border border-white/5 hover:border-slate-800 transition-all duration-300">
             <div class="absolute top-4 right-4 text-[#FF007F] opacity-0 transition-opacity duration-300 ${matches.has(user.name) ? 'opacity-100' : ''}" id="match-heart-${user.name}">
@@ -1291,7 +1537,7 @@
     // Role filtering handlers
     function filterRole(role) {
       currentRoleFilter = role;
-      
+
       const buttons = ['all', 'AI', 'Dev', 'Design'];
       buttons.forEach(btn => {
         const el = document.getElementById(`btn-filter-${btn}`);
@@ -1301,7 +1547,7 @@
           el.className = 'px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold';
         }
       });
-      
+
       renderAttendees();
     }
 
@@ -1325,7 +1571,7 @@
     // Gemstone mining clicker with dynamic progression system
     function mineGem(event) {
       if (!socket) return;
-      
+
       // Emit "mine gem" event clickPower times (for pickaxe yield!)
       for (let i = 0; i < clickPower; i++) {
         socket.emit('mine gem');
@@ -1354,7 +1600,7 @@
           autoMiners += 1;
           minerPrice = Math.floor(minerPrice * 1.6);
           document.getElementById('btn-upgrade-miner').innerText = `${minerPrice} 💎`;
-          
+
           if (autoMiners === 1) {
             setInterval(() => {
               if (socket && autoMiners > 0) {
@@ -1376,11 +1622,11 @@
       document.getElementById('gem-count').innerText = gemsCount;
       const rankEl = document.getElementById('mining-rank');
       const progressEl = document.getElementById('mining-progress');
-      
+
       let currentRank = "Stone Picker ⚒️";
       let minVal = 0;
       let maxVal = 5;
-      
+
       if (gemsCount >= 120) {
         currentRank = "Multiverse Miner 🏆";
         minVal = 120;
@@ -1398,26 +1644,26 @@
         minVal = 5;
         maxVal = 20;
       }
-      
+
       rankEl.innerText = currentRank;
-      
+
       let pct = 100;
       if (maxVal > minVal) {
         pct = ((gemsCount - minVal) / (maxVal - minVal)) * 100;
         pct = Math.min(100, Math.max(0, pct));
       }
       progressEl.style.width = pct + "%";
-      
+
       // Enable/disable shop purchase styling
       const pickaxeBtn = document.getElementById('btn-upgrade-pickaxe');
       const minerBtn = document.getElementById('btn-upgrade-miner');
-      
+
       if (gemsCount < pickaxePrice) {
         pickaxeBtn.classList.add('opacity-40', 'cursor-not-allowed');
       } else {
         pickaxeBtn.classList.remove('opacity-40', 'cursor-not-allowed');
       }
-      
+
       if (gemsCount < minerPrice) {
         minerBtn.classList.add('opacity-40', 'cursor-not-allowed');
       } else {
@@ -1434,13 +1680,13 @@
         }
       }
       triggerLocalConfetti(event, ['#c084fc', '#00FFFF', '#FF007F']);
-      
+
       // Visual feedback: Shrink and vanish crystal
       element.style.pointerEvents = 'none';
       element.style.transform = 'scale(0) rotate(220deg)';
       element.style.opacity = '0';
       element.style.transition = 'all 0.6s cubic-bezier(0.6, -0.28, 0.735, 0.045)';
-      
+
       // Floating indicator bubble
       const rect = element.getBoundingClientRect();
       const popup = document.createElement('div');
@@ -1450,7 +1696,7 @@
       popup.style.left = `${rect.left + rect.width / 2}px`;
       popup.style.top = `${rect.top + rect.height / 2}px`;
       document.body.appendChild(popup);
-      
+
       setTimeout(() => popup.remove(), 1000);
     }
 
@@ -1460,7 +1706,7 @@
       const input = document.getElementById('chat-input');
       const msg = input.value.trim();
       if (!msg || !socket) return;
-      
+
       socket.emit('chat message', { message: msg });
       input.value = '';
     }
@@ -1470,7 +1716,7 @@
       document.getElementById('icebreaker-name').innerText = `Icebreaker Dialogue: ${name}`;
       document.getElementById('icebreaker-text').innerText = icebreaker;
       document.getElementById('icebreaker-modal').style.display = 'flex';
-      
+
       convosCount++;
     }
 
@@ -1485,13 +1731,13 @@
       } else {
         matches.add(username);
         triggerLocalConfetti(event, ['#FF007F', '#00FFFF']);
-        
+
         // Broadcast connection match to live chat
         if (socket) {
           socket.emit('chat message', { message: `⚡ Connected spark matches with ${username}! 💖` });
         }
       }
-      
+
       // Update UI
       document.getElementById('stat-matches').innerText = matches.size;
       const heart = document.getElementById(`match-heart-${username}`);
@@ -1536,7 +1782,7 @@
     }
 
     // Event Creation Logic (Emits to backend)
-    document.getElementById('event-form').addEventListener('submit', function(e) {
+    document.getElementById('event-form').addEventListener('submit', function (e) {
       e.preventDefault();
       const name = document.getElementById('event-name').value.trim();
       const time = document.getElementById('event-time').value.trim();
@@ -1546,7 +1792,7 @@
         socket.emit('create cavern', { name, launchTime: time, capacity: max });
         socket.emit('chat message', { message: `📢 Active cavern event launched: "${name}" at ${time}! Capacity: ${max} hackers.` });
       }
-      
+
       this.reset();
       triggerConfetti();
     });
@@ -1579,7 +1825,7 @@
     function handleUpload() {
       const urlInput = document.getElementById('photo-url-input');
       let url = urlInput.value.trim();
-      
+
       if (!url) {
         url = photoPool[Math.floor(Math.random() * photoPool.length)];
       }
@@ -1650,12 +1896,12 @@
       const name = document.getElementById('team-name').value.trim();
       const looking = document.getElementById('team-looking').value.trim();
       const tech = document.getElementById('team-tech').value.trim();
-      
+
       if (socket) {
         socket.emit('create team', { name, looking, tech });
         socket.emit('chat message', { message: `🔨 Alliance project forged: "${name}" is recruiting "${looking}" using [${tech}]!` });
       }
-      
+
       document.getElementById('team-form').reset();
       triggerConfetti();
     }
@@ -1674,15 +1920,15 @@
 
     function spinDials(event) {
       triggerLocalConfetti(event, ['#FFB800', '#FF007F']);
-      
+
       const tech = slotTechs[Math.floor(Math.random() * slotTechs.length)];
       const realm = slotRealms[Math.floor(Math.random() * slotRealms.length)];
       const focus = slotFocus[Math.floor(Math.random() * slotFocus.length)];
-      
+
       document.getElementById('slot-tech').innerHTML = `<div class="spinner-item text-[#FF007F]">${tech}</div>`;
       document.getElementById('slot-industry').innerHTML = `<div class="spinner-item text-[#00FFFF]">${realm}</div>`;
       document.getElementById('slot-focus').innerHTML = `<div class="spinner-item text-[#FFB800]">${focus}</div>`;
-      
+
       const titles = [
         `Autonomous ${tech} for ${realm} ${focus}`,
         `Next-Gen ${tech} in ${realm} Sector`,
@@ -1693,17 +1939,17 @@
         `Formulate a developer-friendly ${tech} utility focusing on ${focus} operations within the ${realm} hackathon landscape.`,
         `An edge-ready ${tech} portal enabling participants to build ${focus} integrations in the active ${realm} arena.`
       ];
-      
+
       const chosenTitle = titles[Math.floor(Math.random() * titles.length)];
       document.getElementById('idea-title').innerText = chosenTitle;
       document.getElementById('idea-desc').innerText = descs[Math.floor(Math.random() * descs.length)];
-      
+
       const feasibility = ["85%", "90%", "95%", "80%"][Math.floor(Math.random() * 4)];
       const complexity = ["Low", "Medium", "High"][Math.floor(Math.random() * 3)];
-      
+
       document.getElementById('idea-feasibility').innerText = feasibility;
       document.getElementById('idea-complexity').innerText = complexity;
-      
+
       // Broadcast project idea spin
       if (socket) {
         socket.emit('chat message', { message: `🎲 Generated project idea spark: "${chosenTitle}"` });
@@ -1715,9 +1961,11 @@
   <!-- Floating Back to Surface Arrow Button -->
   <!-- Hacker Identification Modal -->
   <div id="join-modal" class="modal-overlay" style="display: flex;">
-    <div class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#FF007F]/70">
+    <div
+      class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#FF007F]/70">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FF007F]/10 blur-3xl rounded-full"></div>
-      <div class="w-14 h-14 bg-[#FF007F]/10 text-[#FF007F] rounded-full flex items-center justify-center mx-auto text-xl border border-[#FF007F]/30 animate-pulse">
+      <div
+        class="w-14 h-14 bg-[#FF007F]/10 text-[#FF007F] rounded-full flex items-center justify-center mx-auto text-xl border border-[#FF007F]/30 animate-pulse">
         <i class="fas fa-gem text-lg"></i>
       </div>
       <div class="space-y-3">
@@ -1725,17 +1973,20 @@
         <p class="text-xs text-gray-400 font-mono">Enter your developer name to descend into the Amethyst Caverns.</p>
       </div>
       <form id="join-form" onsubmit="handleJoin(event)" class="space-y-4">
-        <input type="text" id="join-username" required placeholder="Hacker Name" 
+        <input type="text" id="join-username" required placeholder="Hacker Name"
           class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#FF007F]">
-        <button type="submit" class="w-full py-3 bg-gradient-to-r from-[#FF007F] to-pink-600 text-white font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(255,0,127,0.4)]">
+        <button type="submit"
+          class="w-full py-3 bg-gradient-to-r from-[#FF007F] to-pink-600 text-white font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(255,0,127,0.4)]">
           DESCEND ROUTE
         </button>
       </form>
     </div>
   </div>
 
-  <button id="back-to-top" onclick="scrollToTop(event)" class="fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-tr from-[#FF007F] to-[#00FFFF] text-slate-950 font-black rounded-full shadow-2xl transition-all scale-0 opacity-0 duration-300 hover:scale-110 flex items-center justify-center pointer-events-auto">
-     <i class="fas fa-arrow-up text-lg"></i>
+  <button id="back-to-top" onclick="scrollToTop(event)"
+    class="fixed bottom-6 right-6 z-50 p-4 bg-gradient-to-tr from-[#FF007F] to-[#00FFFF] text-slate-950 font-black rounded-full shadow-2xl transition-all scale-0 opacity-0 duration-300 hover:scale-110 flex items-center justify-center pointer-events-auto">
+    <i class="fas fa-arrow-up text-lg"></i>
   </button>
 </body>
+
 </html>
