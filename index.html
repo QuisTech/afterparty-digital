@@ -1386,13 +1386,21 @@
       if (!username) return;
 
       currentUser = username;
-      document.getElementById('join-modal').style.display = 'none';
+      // Force hide modal
+      const modal = document.getElementById('join-modal');
+      if (modal) modal.style.display = 'none';
+      modal.style.visibility = 'hidden';
 
-      // Join room
-      if (socket) {
-        socket.emit('join', currentUser);
-      }
+      if (socket) socket.emit('join', currentUser);
     }
+
+    document.getElementById('join-modal').style.display = 'none';
+
+    // Join room
+    if (socket) {
+      socket.emit('join', currentUser);
+    }
+
 
     // Handle Join Event
     function handleJoin(e) {
@@ -1960,7 +1968,7 @@
   </script>
   <!-- Floating Back to Surface Arrow Button -->
   <!-- Hacker Identification Modal -->
-  <div id="join-modal" class="modal-overlay" style="display: flex;">
+  <div id="join-modal" class="modal-overlay" style="display: flex; z-index: 200;">
     <div
       class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#FF007F]/70">
       <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FF007F]/10 blur-3xl rounded-full"></div>
