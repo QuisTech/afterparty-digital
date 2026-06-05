@@ -16,3 +16,15 @@ README.md
 task.md
 walkthrough.md
 implementation_plan.md
+
+# Exclude backend and AWS deployment artifacts
+backend-mongo/
+deploy.zip
+deploy_eb.py
+trust-policy.json
+cloudfront-config.json
+options.json
+*.pem
+eb-logs.txt
+.vercel/
+
