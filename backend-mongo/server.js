@@ -173,8 +173,28 @@ mongoose.connect(MONGODB_URI)
 // ---------------------------------------------------------------------------
 // Socket.io Events
 // ---------------------------------------------------------------------------
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
   console.log(`🟢 Client connected [${socket.id}]`);
+
+  // 1. Send public chat history
+  const messages = await Message.find().sort({ timestamp: -1 }).limit(50);
+  socket.emit('chat history', messages.reverse());
+
+  // 2. Send active users list
+  const users = await User.find().select('name gems');
+  socket.emit('users update', users);
+
+  // 3. Send active caverns
+  const caverns = await Cavern.find();
+  socket.emit('caverns update', caverns);
+
+  // 4. Send forged teams
+  const teams = await Team.find();
+  socket.emit('teams update', teams);
+
+  // 5. Send photo wall
+  const photos = await Photo.find().sort({ timestamp: -1 });
+  socket.emit('photos update', photos);
 
   socket.on('join', async (username) => {
     socket.username = username;
@@ -186,25 +206,8 @@ io.on('connection', (socket) => {
       { upsert: true }
     );
 
-    // 1. Send chat history
-    const messages = await Message.find().sort({ timestamp: -1 }).limit(50);
-    socket.emit('chat history', messages.reverse());
-
-    // 2. Send active users list
-    const users = await User.find().select('name gems');
-    io.emit('users update', users);
-
-    // 3. Send active caverns
-    const caverns = await Cavern.find();
-    socket.emit('caverns update', caverns);
-
-    // 4. Send forged teams
-    const teams = await Team.find();
-    socket.emit('teams update', teams);
-
-    // 5. Send photo wall
-    const photos = await Photo.find().sort({ timestamp: -1 });
-    socket.emit('photos update', photos);
+    const updatedUsers = await User.find().select('name gems');
+    io.emit('users update', updatedUsers);
 
     io.emit('system message', `✨ ${username} joined! ✨`);
   });

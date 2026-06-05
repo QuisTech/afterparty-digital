@@ -1098,16 +1098,15 @@
       ? 'http://localhost:3000'
       : 'https://d1mjg93qeqleyh.cloudfront.net';
 
-    // Handle Join Event
-    function handleJoin(e) {
-      e.preventDefault();
-      const input = document.getElementById('join-username');
-      const username = input.value.trim();
-      if (!username) return;
+    let socket;
+    window.onload = function() {
+      generateRailroadTies();
+      updateMiningUI();
+      renderAttendees();
+      setupSocket();
+    };
 
-      currentUser = username;
-      document.getElementById('join-modal').style.display = 'none';
-
+    function setupSocket() {
       // Connect to socket.io
       socket = io(BACKEND_URL);
 
@@ -1141,7 +1140,7 @@
       });
 
       socket.on('gem update', (data) => {
-        if (data.username === currentUser) {
+        if (currentUser && data.username === currentUser) {
           gemsCount = data.gems;
           updateMiningUI();
         }
@@ -1158,9 +1157,22 @@
       socket.on('photos update', (photos) => {
         renderPhotos(photos);
       });
+    }
+
+    // Handle Join Event
+    function handleJoin(e) {
+      e.preventDefault();
+      const input = document.getElementById('join-username');
+      const username = input.value.trim();
+      if (!username) return;
+
+      currentUser = username;
+      document.getElementById('join-modal').style.display = 'none';
 
       // Join room
-      socket.emit('join', currentUser);
+      if (socket) {
+        socket.emit('join', currentUser);
+      }
     }
 
     function appendChatMessage(name, msg) {
@@ -1698,12 +1710,7 @@
       }
     }
 
-    // Initializations
-    window.onload = function() {
-      generateRailroadTies();
-      updateMiningUI();
-      renderAttendees();
-    };
+    // Initializations handled at top of script
   </script>
   <!-- Floating Back to Surface Arrow Button -->
   <!-- Hacker Identification Modal -->
