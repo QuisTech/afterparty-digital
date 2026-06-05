@@ -1,0 +1,35 @@
+<div class="max-w-6xl mx-auto w-full space-y-6">
+  <!-- Header -->
+  <div
+    class="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-white/10 pb-4 gap-4">
+    <div>
+      <h2 class="text-3xl font-black uppercase tracking-tight italic">
+        Amethyst <span class="text-[#00FFFF] text-glow-cyan text-4xl">Networking Mine</span>
+      </h2>
+      <p class="text-xs text-gray-400 mt-1 font-mono">Filter and search developers inside this active cavern.</p>
+    </div>
+
+    <!-- Live Filter & Search Controls -->
+    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto font-mono text-[10px]">
+      <input type="text" id="search-input" oninput="handleSearch()" placeholder="Search developers..."
+        class="bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF] w-40">
+      <div class="flex gap-1 bg-slate-950 p-1 rounded-xl border border-white/5">
+        <button onclick="filterRole('all')" class="px-3 py-1 rounded-lg bg-slate-800 text-white font-bold"
+          id="btn-filter-all">ALL</button>
+        <button onclick="filterRole('AI')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+          id="btn-filter-AI">AI</button>
+        <button onclick="filterRole('Dev')" class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+          id="btn-filter-Dev">DEVS</button>
+        <button onclick="filterRole('Design')"
+          class="px-3 py-1 rounded-lg text-gray-400 hover:text-white font-bold"
+          id="btn-filter-Design">DESIGN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Attendee gallery -->
+  <div id="attendee-gallery"
+    class="grid grid-cols-2 md:grid-cols-4 gap-4 overflow-y-auto max-h-[440px] pr-1 custom-scrollbar">
+    <!-- JS will populate this -->
+  </div>
+</div>

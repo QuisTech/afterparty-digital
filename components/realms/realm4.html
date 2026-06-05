@@ -1,0 +1,71 @@
+<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+  <!-- Col 1: Project Submission Form (col-span-4) -->
+  <div class="lg:col-span-4 space-y-4">
+    <div class="space-y-1">
+      <h2 class="text-3xl font-black uppercase tracking-tight italic">
+        The Alliance <span class="text-[#00FFFF] text-4xl">Forge</span>
+      </h2>
+      <p class="text-xs text-gray-400 font-mono">Form teams and align forces for the hackathon project.</p>
+    </div>
+    <div class="glass-panel p-5 rounded-3xl border-t-2 border-[#00FFFF]/60 shadow-lg space-y-4">
+      <h3 class="text-xs font-black uppercase tracking-widest text-[#00FFFF] flex items-center gap-2">
+        <i class="fas fa-hammer"></i> Register Team
+      </h3>
+      <form id="team-form" onsubmit="createTeam(event)" class="space-y-3 font-mono text-[9px]">
+        <div>
+          <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Project Name</label>
+          <input type="text" id="team-name" required placeholder="Nova Cyber Cavern"
+            class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
+        </div>
+        <div>
+          <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Looking For</label>
+          <input type="text" id="team-looking" required placeholder="AI Specialist, UX Designer"
+            class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
+        </div>
+        <div>
+          <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Core Tech</label>
+          <input type="text" id="team-tech" required placeholder="Next.js, Python, Tailwind"
+            class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#00FFFF]">
+        </div>
+        <button type="submit"
+          class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
+          FORGE ALLIANCE TEAM
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Col 2: Active Projects Gallery (col-span-8) -->
+  <div class="lg:col-span-8 space-y-4">
+    <h3 class="text-xs font-black uppercase tracking-widest text-[#FF007F] font-mono flex items-center gap-2">
+      <i class="fas fa-network-wired"></i> Available Alliances
+    </h3>
+    <div id="teams-container"
+      class="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-y-auto max-h-[350px] pr-1 custom-scrollbar">
+      <!-- Team 1 -->
+      <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
+        <span
+          class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">2/4 Members</span>
+        <h4 class="text-sm font-black text-white uppercase tracking-tight">Cyber Stalactite Systems</h4>
+        <p class="text-[9px] text-gray-400 font-mono">Building decentralized sensor grids inside cavern shafts.</p>
+        <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: Rust Engineer, Data Viz</div>
+        <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
+          <button onclick="requestToJoinTeam(this, event)"
+            class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send Inquiry</button>
+        </div>
+      </div>
+      <!-- Team 2 -->
+      <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
+        <span
+          class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">3/4 Members</span>
+        <h4 class="text-sm font-black text-white uppercase tracking-tight">GeoAmethyst AI</h4>
+        <p class="text-[9px] text-gray-400 font-mono">Mapping crystal growth layers using neural vision models.</p>
+        <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: UX Designer</div>
+        <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
+          <button onclick="requestToJoinTeam(this, event)"
+            class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send Inquiry</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

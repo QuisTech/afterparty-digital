@@ -40,7 +40,17 @@ cursor.style.pointerEvents = 'none';
 cursor.style.zIndex = '99999';
 cursor.style.transform = 'translate(-50%, -50%)';
 cursor.style.transition = 'width 0.1s, height 0.1s, background-color 0.1s';
-document.body.appendChild(cursor);
+
+function initCursor() {
+  if (!document.getElementById('virtual-cursor')) {
+    document.body.appendChild(cursor);
+  }
+}
+if (document.body) {
+  initCursor();
+} else {
+  document.addEventListener('DOMContentLoaded', initCursor);
+}
 
 document.addEventListener('mousemove', (e) => {
   cursor.style.left = e.clientX + 'px';
@@ -62,9 +72,9 @@ document.addEventListener('mouseup', () => {
 });
 """
 
-# Mouse coordinate state tracking (Centered at 1280x720 viewport center)
-current_mouse_x = 640
-current_mouse_y = 360
+# Mouse coordinate state tracking (Centered at 960x600 viewport center)
+current_mouse_x = 480
+current_mouse_y = 300
 
 async def smooth_move_to(page, selector):
     global current_mouse_x, current_mouse_y
@@ -142,22 +152,58 @@ async def record_walkthrough(html_path, temp_dir):
     os.makedirs(temp_dir)
 
     async with async_playwright() as p:
-        # Launch headless browser to render visual elements at high quality on headless VM
+        # Launch headless browser — use a smaller viewport so content appears zoomed in
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(
-            viewport={"width": 1280, "height": 720},
+            viewport={"width": 960, "height": 600},
             record_video_dir=temp_dir,
             record_video_size={"width": 1280, "height": 720}
         )
         
         page = await context.new_page()
-        file_url = "https://afterparty-digital.vercel.app/"
+        
+        # Add console and error handlers
+        page.on("console", lambda msg: print(f"BROWSER CONSOLE: {msg.text}"))
+        page.on("pageerror", lambda err: print(f"BROWSER ERROR: {err}"))
+
+        file_url = os.environ.get("DEMO_URL", "http://localhost:5500")
         print(f"   Opening page: {file_url}")
         
         # Inject the virtual cursor script on load
         await page.add_init_script(CURSOR_INJECT_JS)
         await page.goto(file_url, wait_until="networkidle")
         await page.wait_for_timeout(3000) # let initial animations settle
+        
+        # --- SCENE 0: Dismiss Join Modal ---
+        print("   - Recording Scene 0: Dismissing Join Modal")
+        try:
+            join_modal = page.locator("#join-modal")
+            if await join_modal.is_visible(timeout=3000):
+                await smooth_type(page, "#join-username", "DemoHacker")
+                await smooth_click(page, "#join-modal button[type='submit']")
+                await page.wait_for_timeout(2000) # wait for modal to dismiss and socket to connect
+        except Exception:
+            print("     (No join modal found, continuing...)")
+        
+        # Seed demo attendees via JS so the gallery populates for the video
+        print("   - Seeding demo attendees for video walkthrough...")
+        await page.evaluate("""() => {
+            const demoUsers = [
+                { name: 'Alice Chen', gems: 142 },
+                { name: 'Marcus Rivera', gems: 98 },
+                { name: 'Priya Sharma', gems: 76 },
+                { name: 'Jake Thompson', gems: 55 },
+                { name: 'Sofia Nakamura', gems: 43 },
+                { name: 'DemoHacker', gems: 30 },
+                { name: 'Liam O\\'Brien', gems: 21 },
+                { name: 'Zara Mitchell', gems: 15 }
+            ];
+            // Call the global function that sets onlineUsers internally
+            if (typeof updateLeaderboardAndAttendees === 'function') {
+                updateLeaderboardAndAttendees(demoUsers);
+            }
+        }""")
+        await page.wait_for_timeout(500)
         
         # --- SCENE 1: Launch Room Onboarding (Form entry) ---
         print("   - Recording Scene 1: Launch Room Form Entry")
@@ -170,63 +216,110 @@ async def record_walkthrough(html_path, temp_dir):
         # --- SCENE 2: Networking Arena (Filters and modal checks) ---
         print("   - Recording Scene 2: Amethyst Networking Mine")
         await smooth_scroll_to(page, 0.20)
-        await smooth_click(page, "#btn-filter-Dev")
-        await smooth_type(page, "#search-input", "Alex")
-        await smooth_click(page, "button:has-text('Icebreaker')")
-        await page.wait_for_timeout(2000) # view icebreaker text
-        await smooth_click(page, "button:has-text('DISCOVERY CONFIRMED')")
-        await smooth_click(page, "#attendee-gallery button:has-text('Match')")
-        await page.wait_for_timeout(1000)
+        
+        # Developer cards should be populated from our JS injection above
+        try:
+            await page.wait_for_selector("#attendee-gallery .glass-panel", timeout=3000)
+            print("     Developer cards visible!")
+            await smooth_click(page, "#btn-filter-Dev")
+            await page.wait_for_timeout(1000)
+            
+            # Click Icebreaker on the first visible card
+            icebreaker_btn = page.locator("#attendee-gallery button:has-text('Icebreaker')").first
+            if await icebreaker_btn.is_visible(timeout=3000):
+                await smooth_click(page, "#attendee-gallery button:has-text('Icebreaker')")
+                await page.wait_for_timeout(2000)
+                try:
+                    await smooth_click(page, "button:has-text('DISCOVERY CONFIRMED')")
+                except Exception:
+                    pass
+            
+            # Click Match
+            match_btn = page.locator("#attendee-gallery button:has-text('Match')").first
+            if await match_btn.is_visible(timeout=2000):
+                await smooth_click(page, "#attendee-gallery button:has-text('Match')")
+                await page.wait_for_timeout(1000)
+        except Exception as e:
+            print(f"     (Attendee interaction skipped: {e})")
+            await page.wait_for_timeout(1500)
         
         # --- SCENE 3: Campfire & Crystal Clicker Mini-Game ---
         print("   - Recording Scene 3: Crystal Campfire & Clicker")
         await smooth_scroll_to(page, 0.40)
-        await smooth_type(page, "#chat-input", "Hey everyone! Let's mine some crystals!")
-        await smooth_click(page, "button:has-text('SPARK')")
+        try:
+            await smooth_type(page, "#chat-input", "Hey everyone! Let's mine some crystals!")
+            await smooth_click(page, "button:has-text('SPARK')")
+        except Exception:
+            print("     (Chat input not found, continuing...)")
         
         # Click Amethyst gemstone 15 times to earn currency
-        gem_selector = ".gem-clicker"
-        await smooth_move_to(page, gem_selector)
-        print("     Mining crystals...")
-        for _ in range(15):
-            await page.mouse.down()
-            await asyncio.sleep(0.04)
-            await page.mouse.up()
-            await asyncio.sleep(0.04)
-            
-        await page.wait_for_timeout(500)
-        # Buy Steel Pickaxe upgrade
-        await smooth_click(page, "#btn-upgrade-pickaxe")
+        try:
+            gem_selector = ".gem-clicker"
+            await smooth_move_to(page, gem_selector)
+            print("     Mining crystals...")
+            for _ in range(15):
+                await page.mouse.down()
+                await asyncio.sleep(0.04)
+                await page.mouse.up()
+                await asyncio.sleep(0.04)
+                
+            await page.wait_for_timeout(500)
+            # Buy Steel Pickaxe upgrade
+            await smooth_click(page, "#btn-upgrade-pickaxe")
+        except Exception:
+            print("     (Gem clicker not found, continuing...)")
+        
         # Click the hidden gem near campfire
-        await smooth_click(page, ".hidden-gem")
-        await page.wait_for_timeout(1000)
+        try:
+            await smooth_click(page, ".hidden-gem")
+            await page.wait_for_timeout(1000)
+        except Exception:
+            pass
+        
         # Capture a Flash Moment photo
-        await smooth_click(page, "button:has-text('Capture Moment')")
-        await page.wait_for_timeout(2000)
+        try:
+            await smooth_click(page, "button:has-text('Capture Moment')")
+            await page.wait_for_timeout(2000)
+        except Exception:
+            print("     (Capture Moment button not found, continuing...)")
         
         # --- SCENE 4: The Alliance Forge ---
         print("   - Recording Scene 4: Team Forge Registration")
         await smooth_scroll_to(page, 0.60)
-        await smooth_type(page, "#team-name", "Holographic Sensors")
-        await smooth_type(page, "#team-looking", "UX/UI Designers, Rust Dev")
-        await smooth_type(page, "#team-tech", "React, Rust, Tailwind")
-        await smooth_click(page, "#team-form button[type='submit']")
-        await page.wait_for_timeout(1000)
-        await smooth_click(page, "#teams-container button:has-text('Send Inquiry')")
-        await page.wait_for_timeout(1000)
+        try:
+            await smooth_type(page, "#team-name", "Holographic Sensors")
+            await smooth_type(page, "#team-looking", "UX/UI Designers, Rust Dev")
+            await smooth_type(page, "#team-tech", "React, Rust, Tailwind")
+            await smooth_click(page, "#team-form button[type='submit']")
+            await page.wait_for_timeout(1000)
+        except Exception:
+            print("     (Team form not found, continuing...)")
+        
+        try:
+            await smooth_click(page, "#teams-container button:has-text('Send Inquiry')")
+            await page.wait_for_timeout(1000)
+        except Exception:
+            print("     (Send Inquiry button not found, continuing...)")
 
         # --- SCENE 5: Oracle of Ideas ---
         print("   - Recording Scene 5: Oracle Idea Generator")
         await smooth_scroll_to(page, 0.80)
-        await smooth_click(page, "button:has-text('ROLL IDEA DIALS')")
-        await page.wait_for_timeout(2000) # wait for slot spinner
+        try:
+            await smooth_click(page, "button:has-text('ROLL IDEA DIALS')")
+            await page.wait_for_timeout(2000) # wait for slot spinner
+        except Exception:
+            print("     (Oracle dials not found, continuing...)")
         
         # --- SCENE 6: Bounty Board & Back to Surface ---
         print("   - Recording Scene 6: Sponsor Bounties & Scroll to Top")
         await smooth_scroll_to(page, 1.00)
         await page.wait_for_timeout(2000) # admire bounties
         # Click header logo to scroll smoothly to top
-        await smooth_click(page, "header a.cursor-pointer")
+        try:
+            await smooth_click(page, "header a.cursor-pointer")
+        except Exception:
+            print("     (Header logo not found, scrolling manually...)")
+            await page.evaluate("window.scrollTo({top: 0, behavior: 'smooth'})")
         await page.wait_for_timeout(3500) # wait for smooth scroll animation to reach Realm 1
         
         # Close page and context to finish video saving
@@ -249,7 +342,7 @@ def compile_final_video(temp_dir, narration_audio, final_output):
     if os.path.exists(final_output):
         os.remove(final_output)
         
-    # FFmpeg command using absolute path to compile and scale to 1920x1080 H.264
+    # FFmpeg command to compile H.264 video at native 1280x720
     cmd = [
         "C:\\Users\\Administrator\\Downloads\\ffmpeg\\bin\\ffmpeg.exe",
         "-y",
@@ -257,8 +350,8 @@ def compile_final_video(temp_dir, narration_audio, final_output):
         "-i", narration_audio,
         "-map", "0:v",
         "-map", "1:a",
-        "-vf", "scale=1920:1080",
         "-c:v", "libx264",
+        "-preset", "ultrafast",
         "-pix_fmt", "yuv420p",
         "-c:a", "aac",
         "-shortest",
@@ -280,6 +373,11 @@ def main():
         
         # Step 2: Record visual walk-through
         asyncio.run(record_walkthrough(html_path, temp_video_dir))
+        
+        # Allow Windows some time to release the file handle
+        import time
+        print("   Waiting 3 seconds for Playwright to release file handles...")
+        time.sleep(3)
         
         # Step 3: Stitch tracks together
         compile_final_video(temp_video_dir, narration_audio, final_output)

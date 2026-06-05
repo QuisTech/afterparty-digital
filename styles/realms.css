@@ -1,0 +1,128 @@
+/* realms.css - Realms Stepped Positions & Layout */
+
+/* Fixed Viewport Wrapper */
+#scroll-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600vw;
+  height: 420vh;
+  /* Accommodates stepped realms up to 300vh drop */
+  display: block;
+  transform: translate(0, 0);
+  transition: transform 0.2s cubic-bezier(0.1, 0.75, 0.25, 1);
+  z-index: 10;
+}
+
+.realm {
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.realm > * {
+  pointer-events: auto;
+}
+
+/* Stepped positioning for Diagonal Scroll (sideways + downward) */
+#realm-1 {
+  top: 0vh;
+  left: 0vw;
+  padding-top: 80px;
+}
+
+#realm-2 {
+  top: 60vh;
+  left: 100vw;
+  padding-top: 80px;
+}
+
+#realm-3 {
+  top: 120vh;
+  left: 200vw;
+  padding-top: 80px;
+}
+
+#realm-4 {
+  top: 180vh;
+  left: 300vw;
+  padding-top: 80px;
+}
+
+#realm-5 {
+  top: 240vh;
+  left: 400vw;
+  padding-top: 80px;
+}
+
+#realm-6 {
+  top: 300vh;
+  left: 500vw;
+  padding-top: 80px;
+}
+
+/* Holographic transparent SVG track and glider */
+#rail-svg {
+  opacity: 0.04;
+  /* Extremely transparent guide HUD */
+  mix-blend-mode: screen;
+  z-index: 5;
+  pointer-events: none;
+  /* Keep completely click-through */
+}
+
+.minecart-goose {
+  position: fixed;
+  bottom: 24px;
+  z-index: 40;
+  pointer-events: none;
+  /* 100% click-through, doesn't cover or block any part of website */
+  transition: left 0.2s cubic-bezier(0.1, 0.75, 0.25, 1);
+  animation: floatCart 3s ease-in-out infinite;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 8px var(--primary));
+}
+
+/* Foreground Stalactites and Stalagmites styling */
+.cave-deco {
+  position: absolute;
+  fill: #080614;
+  pointer-events: none;
+  z-index: 8;
+  filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.9));
+}
+
+/* Idea Matrix Dials / Spinner Slots */
+.spinner-slot {
+  height: 48px;
+  overflow: hidden;
+  background: rgba(5, 4, 14, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative;
+}
+
+.spinner-strip {
+  transition: transform 1.5s cubic-bezier(0.1, 0.8, 0.1, 1);
+}
+
+.spinner-item {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

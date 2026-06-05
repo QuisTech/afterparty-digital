@@ -1,0 +1,39 @@
+<header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 px-4 py-3 md:px-8">
+  <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <a href="#" onclick="scrollToTop(event)" class="flex items-center gap-3 cursor-pointer group">
+      <!-- Gem Logo -->
+      <div
+        class="w-10 h-10 bg-gradient-to-br from-[#FF007F] to-[#00FFFF] rounded-xl flex items-center justify-center neon-glow-magenta rotate-3 group-hover:rotate-12 transition-transform duration-300">
+        <i class="fas fa-gem text-white text-lg"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl md:text-2xl font-black tracking-wider uppercase italic">
+            Afterparty <span class="text-[#FF007F] text-glow-magenta">Digital</span>
+          </h1>
+          <span class="bg-[#FFB800] text-slate-950 text-[8px] font-black px-1.5 py-0.5 rounded shadow-sm">DESCENT
+            ROUTE</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Live Metrics Dashboard -->
+    <div
+      class="flex gap-4 md:gap-6 text-sm bg-slate-950/70 p-2 rounded-xl border border-white/5 font-mono text-[10px]">
+      <div class="flex flex-col items-center px-2">
+        <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black">Check-Ins</span>
+        <span class="font-bold text-[#00FFFF] text-glow-cyan" id="stat-checkins">47</span>
+      </div>
+      <div class="h-6 w-px bg-white/10"></div>
+      <div class="flex flex-col items-center px-2">
+        <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black">Channels</span>
+        <span class="font-bold text-[#FFB800]" id="stat-convos">12</span>
+      </div>
+      <div class="h-6 w-px bg-white/10"></div>
+      <div class="flex flex-col items-center px-2">
+        <span class="text-gray-500 uppercase text-[8px] tracking-widest font-black font-bold">Sparked Connections</span>
+        <span class="font-bold text-[#FF007F] text-glow-magenta" id="stat-matches">0</span>
+      </div>
+    </div>
+  </div>
+</header>

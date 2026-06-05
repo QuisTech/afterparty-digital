@@ -1,0 +1,14 @@
+{
+  "name": "afterparty-digital",
+  "version": "1.0.0",
+  "description": "Afterparty Digital—Immersive Diagonal Cavern Descent & Gamified Hackathon Networking",
+  "main": "index.html",
+  "scripts": {
+    "dev:frontend": "npx http-server . -p 5500 -c-1 --cors",
+    "dev:backend": "cd backend-mongo && npm start",
+    "backend": "npm run dev:backend",
+    "frontend": "npm run dev:frontend"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -53,12 +53,90 @@ app.get('/health', (_req, res) => {
   });
 });
 
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    const users = await User.find().sort({ gems: -1 }).limit(10).select('name gems clickPower autoMiners role');
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/teams', async (req, res) => {
+  try {
+    const teams = await Team.find();
+    res.json(teams);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/caverns', async (req, res) => {
+  try {
+    const caverns = await Cavern.find();
+    res.json(caverns);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get('/api/photos', async (req, res) => {
+  try {
+    const photos = await Photo.find().sort({ timestamp: -1 });
+    res.json(photos);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.post('/api/reset-database', async (req, res) => {
+  try {
+    console.log('🔄 Manual database reset requested...');
+    // Delete all collections
+    await User.deleteMany({});
+    await Message.deleteMany({});
+    await Cavern.deleteMany({});
+    await Team.deleteMany({});
+    await Photo.deleteMany({});
+
+    // Reseed fresh data
+    await seedDatabase();
+
+    // Retrieve fresh documents
+    const users = await User.find().select('name gems role');
+    const caverns = await Cavern.find();
+    const teams = await Team.find();
+    const photos = await Photo.find().sort({ timestamp: -1 });
+    const messages = [];
+
+    // Broadcast update events to all active websockets
+    io.emit('users update', users);
+    io.emit('caverns update', caverns);
+    io.emit('teams update', teams);
+    io.emit('photos update', photos);
+    io.emit('chat history', messages);
+    io.emit('system message', '🔄 Caverns and shafts reset manually to default seeded values! 🔄');
+
+    res.json({ status: 'success', message: 'Database reset and seeded successfully.' });
+  } catch (err) {
+    console.error('Error resetting database:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ---------------------------------------------------------------------------
 // Models
 // ---------------------------------------------------------------------------
 const userSchema = new mongoose.Schema({
-  name: { type: String, unique: true },
+  name: { type: String, unique: true, required: true },
+  role: { type: String, default: 'Full Stack Dev' },
   gems: { type: Number, default: 0 },
+  clickPower: { type: Number, default: 1 },
+  autoMiners: { type: Number, default: 0 },
+  totalGemsMined: { type: Number, default: 0 },
+  totalUpgradesPurchased: { type: Number, default: 0 },
+  achievements: { type: [String], default: [] },
+  lastUpgradeTime: { type: Date, default: null }
 });
 
 const messageSchema = new mongoose.Schema({
@@ -104,14 +182,14 @@ async function seedDatabase() {
     if (userCount === 0) {
       console.log('🌱 Seeding initial developers...');
       const seedUsers = [
-        { name: 'Michquis', gems: 120 },
-        { name: 'QuantumMiner', gems: 85 },
-        { name: 'AetherCavern', gems: 64 },
-        { name: 'CyberGoose', gems: 42 },
-        { name: 'NovaDesigner', gems: 38 },
-        { name: 'PixelArtisan', gems: 29 },
-        { name: 'RustCoder', gems: 24 },
-        { name: 'DevopsSage', gems: 15 }
+        { name: 'Michquis', gems: 120, clickPower: 5, autoMiners: 3, role: 'AI Engineer' },
+        { name: 'QuantumMiner', gems: 85, clickPower: 3, autoMiners: 2, role: 'ML Researcher' },
+        { name: 'AetherCavern', gems: 64, clickPower: 3, autoMiners: 1, role: 'SysAdmin' },
+        { name: 'CyberGoose', gems: 42, clickPower: 1, autoMiners: 1, role: 'Full Stack Dev' },
+        { name: 'NovaDesigner', gems: 38, clickPower: 1, autoMiners: 0, role: 'UX Designer' },
+        { name: 'PixelArtisan', gems: 29, clickPower: 1, autoMiners: 0, role: 'UX Designer' },
+        { name: 'RustCoder', gems: 24, clickPower: 1, autoMiners: 0, role: 'Full Stack Dev' },
+        { name: 'DevopsSage', gems: 15, clickPower: 1, autoMiners: 0, role: 'SysAdmin' }
       ];
       await User.insertMany(seedUsers);
       console.log('✅ Initial developers seeded!');
@@ -173,6 +251,91 @@ mongoose.connect(MONGODB_URI)
 // ---------------------------------------------------------------------------
 // Socket.io Events
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Socket.io Helpers & Background Cycles
+// ---------------------------------------------------------------------------
+
+async function checkAchievements(user, socket) {
+  const achievements = [];
+  const oldAchievementsCount = user.achievements ? user.achievements.length : 0;
+
+  if (user.totalGemsMined >= 1000 && !user.achievements?.includes('master_miner')) {
+    achievements.push('master_miner');
+    user.gems += 100;
+  }
+
+  if (user.totalUpgradesPurchased >= 10 && !user.achievements?.includes('upgrade_master')) {
+    achievements.push('upgrade_master');
+    user.gems += 200;
+  }
+
+  if (achievements.length > 0) {
+    user.achievements = user.achievements || [];
+    user.achievements.push(...achievements);
+    await user.save();
+
+    // Notify user of updated stats and stats update
+    socket.emit('user stats', {
+      gems: user.gems,
+      clickPower: user.clickPower,
+      autoMiners: user.autoMiners,
+      totalGemsMined: user.totalGemsMined,
+      totalUpgradesPurchased: user.totalUpgradesPurchased,
+      achievements: user.achievements
+    });
+
+    socket.emit('gem update', { username: user.name, gems: user.gems });
+
+    achievements.forEach(ach => {
+      const displayNames = {
+        'master_miner': 'Master Miner 🏆 (+100 💎)',
+        'upgrade_master': 'Upgrade Master 👑 (+200 💎)'
+      };
+      io.emit('system message', `🏆 ACHIEVEMENT UNLOCKED! ${user.name} achieved: ${displayNames[ach] || ach}!`);
+    });
+
+    const users = await User.find().select('name gems role');
+    io.emit('users update', users);
+  }
+}
+
+// Server-Side Auto-Miner passive scheduler ticking once a second
+setInterval(async () => {
+  try {
+    let updatedAny = false;
+    for (const socket of io.sockets.sockets.values()) {
+      if (socket.username) {
+        const user = await User.findOne({ name: socket.username });
+        if (user && user.autoMiners > 0) {
+          const passiveGems = user.autoMiners;
+          user.gems += passiveGems;
+          user.totalGemsMined += passiveGems;
+          await user.save();
+          updatedAny = true;
+
+          socket.emit('gem update', {
+            username: user.name,
+            gems: user.gems,
+            earned: passiveGems
+          });
+
+          await checkAchievements(user, socket);
+        }
+      }
+    }
+
+    if (updatedAny) {
+      const users = await User.find().select('name gems role');
+      io.emit('users update', users);
+    }
+  } catch (err) {
+    console.error('Server-side auto-miner error:', err.message);
+  }
+}, 1000);
+
+// ---------------------------------------------------------------------------
+// Socket.io Events
+// ---------------------------------------------------------------------------
 io.on('connection', async (socket) => {
   console.log(`🟢 Client connected [${socket.id}]`);
 
@@ -181,7 +344,7 @@ io.on('connection', async (socket) => {
   socket.emit('chat history', messages.reverse());
 
   // 2. Send active users list
-  const users = await User.find().select('name gems');
+  const users = await User.find().select('name gems role');
   socket.emit('users update', users);
 
   // 3. Send active caverns
@@ -196,20 +359,58 @@ io.on('connection', async (socket) => {
   const photos = await Photo.find().sort({ timestamp: -1 });
   socket.emit('photos update', photos);
 
-  socket.on('join', async (username) => {
+  socket.on('join', async (data) => {
+    let username = '';
+    let role = 'Full Stack Dev';
+
+    if (typeof data === 'string') {
+      username = data;
+    } else if (data && typeof data === 'object') {
+      username = data.username;
+      role = data.role || 'Full Stack Dev';
+    }
+
+    if (!username) return;
     socket.username = username;
     
-    // Register or fetch user
-    await User.findOneAndUpdate(
-      { name: username },
-      { name: username },
-      { upsert: true }
-    );
+    try {
+      // Register or fetch user atomically, updating/syncing the latest selected role
+      const user = await User.findOneAndUpdate(
+        { name: username },
+        { 
+          $setOnInsert: { gems: 0, clickPower: 1, autoMiners: 0 },
+          $set: { role: role }
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true }
+      );
 
-    const updatedUsers = await User.find().select('name gems');
-    io.emit('users update', updatedUsers);
+      socket.emit('user stats', {
+        gems: user.gems,
+        clickPower: user.clickPower,
+        autoMiners: user.autoMiners,
+        totalGemsMined: user.totalGemsMined || 0,
+        totalUpgradesPurchased: user.totalUpgradesPurchased || 0,
+        achievements: user.achievements || []
+      });
 
-    io.emit('system message', `✨ ${username} joined! ✨`);
+      const updatedUsers = await User.find().select('name gems role');
+      io.emit('users update', updatedUsers);
+      io.emit('system message', `✨ ${username} joined! ✨`);
+    } catch (err) {
+      console.error('Error in socket join:', err.message);
+      // Fallback: reload the user if a duplicate key exception was thrown concurrently
+      const user = await User.findOne({ name: username });
+      if (user) {
+        socket.emit('user stats', {
+          gems: user.gems,
+          clickPower: user.clickPower,
+          autoMiners: user.autoMiners,
+          totalGemsMined: user.totalGemsMined || 0,
+          totalUpgradesPurchased: user.totalUpgradesPurchased || 0,
+          achievements: user.achievements || []
+        });
+      }
+    }
   });
 
   // Chat message handler
@@ -218,27 +419,101 @@ io.on('connection', async (socket) => {
     io.emit('chat message', { username: socket.username, message: data.message });
   });
 
-  // Gem mining handler
+  // Gem mining handler (Server-side multiplier applied!)
   socket.on('mine gem', async () => {
+    if (!socket.username) return;
     const user = await User.findOne({ name: socket.username });
     if (user) {
-      user.gems += 1;
+      const gemsEarned = user.clickPower;
+      user.gems += gemsEarned;
+      user.totalGemsMined += gemsEarned;
       await user.save();
-      io.emit('gem update', { username: socket.username, gems: user.gems });
+      
+      socket.emit('gem update', { username: socket.username, gems: user.gems });
+      
       const users = await User.find().select('name gems');
       io.emit('users update', users);
+
+      await checkAchievements(user, socket);
     }
   });
 
-  // Spend gems handler
-  socket.on('spend gems', async (data) => {
+  // Secure server-side buy upgrade transaction handler
+  socket.on('buy upgrade', async (data) => {
+    if (!socket.username) return;
     const user = await User.findOne({ name: socket.username });
-    if (user && user.gems >= data.amount) {
-      user.gems -= data.amount;
-      await user.save();
-      io.emit('gem update', { username: socket.username, gems: user.gems });
+    if (!user) return;
+
+    // Rate limiting purchase trigger to prevent console click macros
+    if (user.lastUpgradeTime && Date.now() - user.lastUpgradeTime < 1000) {
+      socket.emit('error', { message: 'Please wait before buying another upgrade' });
+      return;
+    }
+
+    let cost = 0;
+    let updateDoc = {};
+    let upgradeName = '';
+
+    if (data.type === 'pickaxe') {
+      cost = Math.floor(15 * Math.pow(1.5, Math.floor((user.clickPower - 1) / 2)));
+      if (user.gems >= cost) {
+        updateDoc = {
+          $inc: {
+            gems: -cost,
+            clickPower: 2,
+            totalUpgradesPurchased: 1
+          },
+          $set: {
+            lastUpgradeTime: new Date()
+          }
+        };
+        upgradeName = `a +${user.clickPower + 2} pickaxe! ⚒️`;
+      }
+    } else if (data.type === 'miner') {
+      cost = Math.floor(50 * Math.pow(1.6, user.autoMiners));
+      if (user.gems >= cost) {
+        updateDoc = {
+          $inc: {
+            gems: -cost,
+            autoMiners: 1,
+            totalUpgradesPurchased: 1
+          },
+          $set: {
+            lastUpgradeTime: new Date()
+          }
+        };
+        upgradeName = `a goose miner! 🦆`;
+      }
+    }
+
+    if (cost && Object.keys(updateDoc).length > 0) {
+      const updatedUser = await User.findOneAndUpdate(
+        { name: socket.username },
+        updateDoc,
+        { new: true }
+      );
+
+      socket.emit('user stats', {
+        gems: updatedUser.gems,
+        clickPower: updatedUser.clickPower,
+        autoMiners: updatedUser.autoMiners,
+        totalGemsMined: updatedUser.totalGemsMined,
+        totalUpgradesPurchased: updatedUser.totalUpgradesPurchased,
+        achievements: updatedUser.achievements
+      });
+
+      socket.emit('gem update', { username: socket.username, gems: updatedUser.gems });
+      
       const users = await User.find().select('name gems');
       io.emit('users update', users);
+
+      io.emit('system message', `📢 ${socket.username} purchased ${upgradeName}`);
+      
+      await checkAchievements(updatedUser, socket);
+    } else {
+      socket.emit('error', { 
+        message: `Need ${cost - user.gems} more gems for ${data.type === 'pickaxe' ? 'Pickaxe' : 'Goose Miner'}!` 
+      });
     }
   });
 
@@ -288,7 +563,6 @@ io.on('connection', async (socket) => {
     try {
       const photo = await Photo.findById(data.photoId);
       if (photo) {
-        // Prevent duplicate likes from the same user
         if (!photo.likedBy.includes(data.username)) {
           photo.likedBy.push(data.username);
           photo.likes += 1;

@@ -1,0 +1,84 @@
+<div class="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+  <!-- Text intro (col-span-3) -->
+  <div class="lg:col-span-3 space-y-4">
+    <h2 class="text-3xl md:text-4xl font-black uppercase tracking-tight leading-none italic">
+      Descend into <br>
+      <span class="text-gold-gradient text-4xl md:text-5xl text-glow-magenta">Launch Room</span>
+    </h2>
+    <p class="text-[11px] text-gray-400 leading-relaxed font-mono">
+      Launch a party, scan the portal access code, and explore developer souls in the deep caverns.
+      Scroll down to descend into the Amethyst Networking Mine.
+    </p>
+    <div class="flex items-center gap-2 text-xs font-bold text-[#00FFFF] animate-bounce">
+      Scroll Down to Descend <i class="fas fa-chevron-down ml-1"></i>
+    </div>
+  </div>
+
+  <!-- Form Console Panel (col-span-4) -->
+  <div class="lg:col-span-4">
+    <div
+      class="glass-panel p-5 rounded-3xl space-y-4 relative overflow-hidden border-t-2 border-[#FF007F]/60 shadow-lg">
+      <h3 class="text-xs font-black uppercase tracking-widest text-[#FF007F] flex items-center gap-2">
+        <i class="fas fa-fire-flame-curved animate-pulse"></i> Deploy Cavern Shaft
+      </h3>
+      <form id="event-form" class="space-y-3 font-mono text-[9px]">
+        <div>
+          <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Cavern Name</label>
+          <input type="text" id="event-name" required placeholder="Midnight Hackers Cavern"
+            class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Launch Time</label>
+            <input type="text" id="event-time" required placeholder="Tonight, 10 PM"
+              class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
+          </div>
+          <div>
+            <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Capacity</label>
+            <input type="number" id="event-max" required placeholder="100"
+              class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-[#FF007F]">
+          </div>
+        </div>
+        <input type="hidden" id="event-location" value="The Amethyst Cave">
+        <button type="submit"
+          class="w-full btn-adventure py-2.5 rounded-xl font-black uppercase tracking-wider text-[9px] text-white">
+          IGNITE CAVERN EVENT
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Active Caverns List (col-span-3) -->
+  <div class="lg:col-span-3">
+    <div
+      class="glass-panel p-5 rounded-3xl border-t-2 border-[#FFB800]/60 space-y-3 h-[250px] flex flex-col justify-between shadow-lg">
+      <h3 class="text-xs font-black uppercase tracking-widest text-[#FFB800] flex items-center gap-2">
+        <i class="fas fa-list-ul"></i> Active Caverns
+      </h3>
+      <div id="events-container" class="space-y-2 overflow-y-auto flex-grow custom-scrollbar pr-1">
+        <!-- Pre-populated active cavern -->
+        <div class="glass-panel p-3 rounded-xl border-l-4 border-[#00FFFF] space-y-1">
+          <div class="flex justify-between items-center text-[8px] font-mono text-gray-400">
+            <span class="font-bold text-[#00FFFF]">ACTIVE SHAFT</span>
+            <span><i class="fas fa-users mr-0.5"></i> 47/100</span>
+          </div>
+          <h4 class="text-[11px] font-black uppercase tracking-tight text-white">Midnight Hackers Cavern</h4>
+          <p class="text-[8px] text-gray-500 font-mono"><i class="fas fa-map-marker-alt mr-0.5"></i> The Amethyst Cave • Active Now</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Check-in Portal QR (col-span-2) -->
+  <div class="lg:col-span-2 flex flex-col items-center">
+    <div
+      class="glass-panel p-4 rounded-3xl flex flex-col items-center text-center space-y-3 border-t-2 border-[#00FFFF]/60 shadow-lg">
+      <span class="text-[8px] font-black uppercase tracking-widest text-gray-400 font-mono">PORTAL QR</span>
+      <div class="bg-white p-1.5 rounded-xl shadow-lg rotate-1 hover:rotate-0 transition-transform">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=100&data=AfterpartyDigital&color=0A0A0A"
+          alt="QR" class="w-20 h-20">
+      </div>
+      <p class="text-[7px] text-gray-500 font-mono">SCAN TO ENTER</p>
+    </div>
+  </div>
+</div>

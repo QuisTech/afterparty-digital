@@ -1,0 +1,61 @@
+<!-- Icebreaker Portal Modal -->
+<div id="icebreaker-modal" class="modal-overlay">
+  <div
+    class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#00FFFF]/70">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#00FFFF]/10 blur-3xl rounded-full"></div>
+
+    <div
+      class="w-14 h-14 bg-[#00FFFF]/10 text-[#00FFFF] rounded-full flex items-center justify-center mx-auto text-xl border border-[#00FFFF]/30">
+      <i class="fas fa-comment-dots animate-bounce"></i>
+    </div>
+
+    <div class="space-y-3">
+      <h3 class="text-[#00FFFF] uppercase text-[9px] tracking-widest font-black" id="icebreaker-name">Icebreaker Dialogue</h3>
+      <p class="text-base font-bold italic text-white" id="icebreaker-text">"Ask Alex about their favorite Python framework!"</p>
+    </div>
+
+    <button onclick="closeModal()"
+      class="w-full py-3 bg-gradient-to-r from-[#00FFFF] to-cyan-600 text-slate-950 font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(0,255,255,0.4)]">
+      DISCOVERY CONFIRMED
+    </button>
+  </div>
+</div>
+
+<!-- Hacker Identification Modal -->
+<div id="join-modal" class="modal-overlay" style="display: flex; z-index: 200;">
+  <div
+    class="glass-panel max-w-sm w-full mx-4 p-8 rounded-3xl text-center space-y-6 shadow-2xl relative overflow-hidden border-t-4 border-[#FF007F]/70">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-[#FF007F]/10 blur-3xl rounded-full"></div>
+    <div
+      class="w-14 h-14 bg-[#FF007F]/10 text-[#FF007F] rounded-full flex items-center justify-center mx-auto text-xl border border-[#FF007F]/30 animate-pulse">
+      <i class="fas fa-gem text-lg"></i>
+    </div>
+    <div class="space-y-3">
+      <h3 class="text-[#FF007F] uppercase text-xs tracking-widest font-black">Identify Miner</h3>
+      <p class="text-xs text-gray-400 font-mono">Enter your developer name to descend into the Amethyst Caverns.</p>
+    </div>
+    <form id="join-form" onsubmit="handleJoin(event)" class="space-y-4">
+      <div>
+        <label class="block text-left uppercase tracking-widest text-gray-400 text-[8px] font-mono mb-1">Hacker Name</label>
+        <input type="text" id="join-username" required placeholder="Hacker Name"
+          class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#FF007F]">
+      </div>
+      <div>
+        <label class="block text-left uppercase tracking-widest text-gray-400 text-[8px] font-mono mb-1">Hacker Role</label>
+        <select id="join-role" required
+          class="w-full bg-[#130f26]/80 border border-white/10 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-[#FF007F] font-mono">
+          <option value="AI Engineer" class="bg-[#05040e]">AI Engineer</option>
+          <option value="UX Designer" class="bg-[#05040e]">UX Designer</option>
+          <option value="Full Stack Dev" class="bg-[#05040e]" selected>Full Stack Dev</option>
+          <option value="Product Manager" class="bg-[#05040e]">Product Manager</option>
+          <option value="ML Researcher" class="bg-[#05040e]">ML Researcher</option>
+          <option value="SysAdmin" class="bg-[#05040e]">SysAdmin</option>
+        </select>
+      </div>
+      <button type="submit"
+        class="w-full py-3 bg-gradient-to-r from-[#FF007F] to-pink-600 text-white font-black uppercase tracking-wider text-[10px] rounded-xl transition-all hover:shadow-[0_0_15px_rgba(255,0,127,0.4)]">
+        DESCEND ROUTE
+      </button>
+    </form>
+  </div>
+</div>
