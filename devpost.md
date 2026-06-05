@@ -56,5 +56,6 @@ Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-t
 
 ## 🚀 What's Next for Afterparty Digital
 * **Devpost Submission Integration**: Connecting the Alliance Forge directly to Devpost APIs to automatically export formed hackathon teams into submissions.
-* **Audio Proximity Caverns**: Integrating WebRTC voice channels so hackers can chat with nearby miners in real time as they scroll past each other.
+* **WebRTC Voice Proximity Channels**: Layering spatial voice chat on top of our existing Socket.io text chat, so hackers can hear nearby miners as they scroll past each other in the cavern.
 * **Physical QR Portals**: A companion mobile app for event staff to physically scan attendee badges and check them directly into active cavern shafts.
+* **Leaderboard Tournaments**: Timed competitive mining sessions where the top crystal miners win real sponsor prizes at the end of the event.
