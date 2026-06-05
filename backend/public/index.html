@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Afterparty Digital - Real Backend</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body class="bg-black text-white">
+  <div class="p-8">
+    <h1 class="text-3xl font-bold">🔥 Afterparty Digital - REAL BACKEND</h1>
+    
+    <div class="mt-8">
+      <input type="text" id="username" placeholder="Your name" class="bg-gray-800 p-2 rounded">
+      <button onclick="join()" class="bg-pink-600 p-2 rounded ml-2">Join</button>
+    </div>
+    
+    <div class="mt-8 grid grid-cols-2 gap-8">
+      <div>
+        <h2 class="text-xl">💎 Mine Gems</h2>
+        <button onclick="mine()" class="text-6xl p-4">💎</button>
+        <p>Your gems: <span id="myGems">0</span></p>
+      </div>
+      
+      <div>
+        <h2 class="text-xl">💬 Global Chat</h2>
+        <div id="chat" class="h-96 overflow-y-auto bg-gray-900 p-4 rounded"></div>
+        <input type="text" id="message" class="bg-gray-800 p-2 rounded w-full mt-2">
+        <button onclick="sendMessage()" class="bg-blue-600 p-2 rounded mt-2">Send</button>
+      </div>
+    </div>
+    
+    <div class="mt-8">
+      <h2 class="text-xl">👥 Active Miners</h2>
+      <div id="users" class="grid grid-cols-4 gap-2 mt-2"></div>
+    </div>
+  </div>
+  
+  <script>
+    let socket;
+    let currentUser = '';
+    
+    function join() {
+      currentUser = document.getElementById('username').value;
+      if (!currentUser) return;
+      
+      socket = io();
+      socket.emit('join', currentUser);
+      
+      socket.on('chat history', (messages) => {
+        messages.forEach(msg => addMessage(msg.username, msg.message));
+      });
+      
+      socket.on('chat message', (data) => {
+        addMessage(data.username, data.message);
+      });
+      
+      socket.on('gem update', (data) => {
+        if (data.username === currentUser) {
+          document.getElementById('myGems').innerHTML = data.gems;
+        }
+      });
+      
+      socket.on('users update', (users) => {
+        const container = document.getElementById('users');
+        container.innerHTML = users.map(u => 
+          `<div class="bg-gray-800 p-2 rounded">${u.name} 💎${u.gems}</div>`
+        ).join('');
+      });
+      
+      socket.on('system message', (msg) => {
+        addMessage('SYSTEM', msg);
+      });
+    }
+    
+    function addMessage(username, message) {
+      const chat = document.getElementById('chat');
+      const div = document.createElement('div');
+      div.className = 'mb-2';
+      div.innerHTML = `<span class="text-cyan-400">${username}:</span> ${message}`;
+      chat.appendChild(div);
+      chat.scrollTop = chat.scrollHeight;
+    }
+    
+    function sendMessage() {
+      const message = document.getElementById('message').value;
+      if (message && socket) {
+        socket.emit('chat message', { message });
+        document.getElementById('message').value = '';
+      }
+    }
+    
+    function mine() {
+      if (socket) {
+        socket.emit('mine gem');
+        confetti({ particleCount: 20 });
+      }
+    }
+  </script>
+</body>
+</html>
