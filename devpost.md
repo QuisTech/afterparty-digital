@@ -26,7 +26,7 @@ Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-t
    * A **Live Photo Wall** where users upload images. The wall container is restricted to a scrollable feed, preventing large uploads from breaking layout symmetry.
    * Floating purple particle sparks and hidden amethyst crystals (easter eggs) styled adjacent to logs.
 4. **Realm 4: The Alliance Forge**: A team recruitment registry. Teams publish concepts and Stack vacancies, and solo developers send instant inquiries to join.
-5. **Realm 5: Oracle of Ideas**: A 3-dial slot machine that spins tech stacks, industry targets, and core goals to generate project prompts with dynamic feasibility ratings.
+5. **Realm 5: Oracle of Ideas**: A production-grade 3-dial slot machine. Staggered physical reel animations (built using dynamic CSS translations and ease-out cubic-bezier curves) spin through technologies, industry sectors, and product goals. A custom-designed rule engine dynamically synthesizes a cohesive, professional-grade 3-sentence project prompt, calculates a realistic estimated feasibility percentage, and computes a complexity rating (from Low to Very High) color-coded by badge.
 6. **Realm 6: Sponsor Bounty Board**: A showcase of API challenges (OpenAI, MongoDB, Vercel) alongside requirements and rewards.
 
 ---
@@ -51,11 +51,12 @@ Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-t
 * Built a fully production-ready, database-backed web application without relying on heavy frontend frameworks, resulting in extremely fast loading times and smooth rendering.
 * Created secure, server-side validation rules for clicker upgrades, making the mini-game proof against console click hacks.
 * Solved responsive diagonal-to-vertical layout routing to ensure a premium, modern design aesthetic.
+* Engineered a high-fidelity staggered dial spinner and dynamic template synthesizer for the Oracle of Ideas, generating 512 distinct, coherent hackathon prompt concepts with realistic feasibility/complexity scoring completely offline in the browser.
 
 ---
 
 ## 🚀 What's Next for Afterparty Digital
-* **Devpost Submission Integration**: Connecting the Alliance Forge directly to Devpost APIs to automatically export formed hackathon teams into submissions.
+* **Name.com Domain Integration**: Connecting the Launch Room directly to the Name.com API so organizers can register and configure custom `afterparty.digital` subdomains for each cavern event instance.
 * **WebRTC Voice Proximity Channels**: Layering spatial voice chat on top of our existing Socket.io text chat, so hackers can hear nearby miners as they scroll past each other in the cavern.
 * **Physical QR Portals**: A companion mobile app for event staff to physically scan attendee badges and check them directly into active cavern shafts.
 * **Leaderboard Tournaments**: Timed competitive mining sessions where the top crystal miners win real sponsor prizes at the end of the event.

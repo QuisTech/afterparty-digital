@@ -19,7 +19,7 @@ Hackers explore candidate galleries, engage at a real-time campfire chat board, 
    * An **Amethyst Mining clicker game** linked to a **Secure Upgrades Shop**. Click currency is validated server-side to prevent console click hacks, allowing users to buy Steel Pickaxes or hire Goose Miners.
    * A **Live Photo Wall** feed with a vertically contained scroll layout so that live uploads never break the viewport height.
 4. **Alliance Forge (Realm 4)**: Coordinate project teams. Teams publish stack details and vacancies, and solo developers send instant inquiries.
-5. **Oracle of Ideas (Realm 5)**: A 3-dial slot machine that spins tech stacks, industry categories, and goals to generate prompt ideas with dynamic feasibility scores.
+5. **Oracle of Ideas (Realm 5)**: A production-grade 3-dial slot machine. Staggered physical reel animations (built using dynamic CSS translations and ease-out cubic-bezier curves) spin through technologies, industry sectors, and product goals. A custom-designed rule engine dynamically synthesizes a cohesive, professional-grade 3-sentence project prompt, calculates a realistic estimated feasibility percentage, and computes a complexity rating (from Low to Very High) color-coded by badge.
 6. **Sponsor Bounty Board (Realm 6)**: A showcase of developer challenges (OpenAI, MongoDB, Vercel) alongside API rules and awards.
 
 ---
