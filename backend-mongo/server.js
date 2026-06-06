@@ -157,7 +157,7 @@ const teamSchema = new mongoose.Schema({
   looking: String,
   tech: String,
   membersCount: { type: Number, default: 1 },
-  creator: { type: String, required: true },
+  creator: { type: String, default: 'Anonymous' },
   members: { type: [String], default: [] },
   inquiries: { type: [String], default: [] }
 });

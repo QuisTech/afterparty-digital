@@ -72,9 +72,9 @@ document.addEventListener('mouseup', () => {
 });
 """
 
-# Mouse coordinate state tracking (Centered at 960x600 viewport center)
-current_mouse_x = 480
-current_mouse_y = 300
+# Mouse coordinate state tracking (Centered at 1280x720 viewport center)
+current_mouse_x = 640
+current_mouse_y = 360
 
 async def smooth_move_to(page, selector):
     global current_mouse_x, current_mouse_y
@@ -155,7 +155,8 @@ async def record_walkthrough(html_path, temp_dir):
         # Launch headless browser — use a smaller viewport so content appears zoomed in
         browser = await p.chromium.launch(headless=True)
         context = await browser.new_context(
-            viewport={"width": 960, "height": 600},
+            viewport={"width": 1280, "height": 720},
+            device_scale_factor=1.25,
             record_video_dir=temp_dir,
             record_video_size={"width": 1280, "height": 720}
         )
