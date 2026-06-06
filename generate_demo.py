@@ -211,7 +211,7 @@ async def record_walkthrough(html_path, temp_dir):
         await smooth_type(page, "#event-time", "10 PM")
         await smooth_type(page, "#event-max", "80")
         await smooth_click(page, "button[type='submit']")
-        await page.wait_for_timeout(22000) # Wait for narration to finish speaking about Realm 1
+        await page.wait_for_timeout(10000) # Wait for narration to finish speaking about Realm 1
         
         # --- SCENE 2: Networking Arena (Filters and modal checks) ---
         print("   - Recording Scene 2: Amethyst Networking Mine")
@@ -243,7 +243,7 @@ async def record_walkthrough(html_path, temp_dir):
             print(f"     (Attendee interaction skipped: {e})")
             await page.wait_for_timeout(1000)
             
-        await page.wait_for_timeout(15000) # Wait for narration to finish speaking about Realm 2
+        await page.wait_for_timeout(10000) # Wait for narration to finish speaking about Realm 2
         
         # --- SCENE 3: Campfire & Crystal Clicker Mini-Game ---
         print("   - Recording Scene 3: Crystal Campfire & Clicker")
@@ -285,7 +285,7 @@ async def record_walkthrough(html_path, temp_dir):
         except Exception:
             print("     (Capture Moment button not found, continuing...)")
             
-        await page.wait_for_timeout(20000) # Wait for narration to finish speaking about Realm 3
+        await page.wait_for_timeout(12000) # Wait for narration to finish speaking about Realm 3
         
         # --- SCENE 4: The Alliance Forge ---
         print("   - Recording Scene 4: Team Forge Registration")
@@ -305,7 +305,7 @@ async def record_walkthrough(html_path, temp_dir):
         except Exception:
             print("     (Send Inquiry button not found, continuing...)")
             
-        await page.wait_for_timeout(10000) # Wait for narration to finish speaking about Realm 4
+        await page.wait_for_timeout(8000) # Wait for narration to finish speaking about Realm 4
 
         # --- SCENE 5: Oracle of Ideas ---
         print("   - Recording Scene 5: Oracle Idea Generator")
@@ -328,7 +328,7 @@ async def record_walkthrough(html_path, temp_dir):
         except Exception:
             print("     (Header logo not found, scrolling manually...)")
             await page.evaluate("window.scrollTo({top: 0, behavior: 'smooth'})")
-        await page.wait_for_timeout(6000) # wait for smooth scroll animation to reach Realm 1 and narration to finish
+        await page.wait_for_timeout(10000) # wait for smooth scroll animation to reach Realm 1 and narration to finish
         
         # Close page and context to finish video saving
         await page.close()
