@@ -87,7 +87,7 @@ async def smooth_move_to(page, selector):
     target_x = box["x"] + box["width"] / 2
     target_y = box["y"] + box["height"] / 2
     
-    steps = 22
+    steps = 8
     for i in range(1, steps + 1):
         t = i / steps
         # Cubic ease-in-out movement
@@ -95,30 +95,30 @@ async def smooth_move_to(page, selector):
         x = current_mouse_x + (target_x - current_mouse_x) * t_smooth
         y = current_mouse_y + (target_y - current_mouse_y) * t_smooth
         await page.mouse.move(x, y)
-        await asyncio.sleep(0.01) # 10ms
+        await asyncio.sleep(0.005)
         
     current_mouse_x = target_x
     current_mouse_y = target_y
-    await asyncio.sleep(0.12)
+    await asyncio.sleep(0.05)
 
 async def smooth_click(page, selector):
     await smooth_move_to(page, selector)
     await page.mouse.down()
-    await asyncio.sleep(0.08)
+    await asyncio.sleep(0.04)
     await page.mouse.up()
-    await asyncio.sleep(0.2)
+    await asyncio.sleep(0.1)
 
 async def smooth_type(page, selector, text):
     await smooth_click(page, selector)
-    await page.keyboard.type(text, delay=70)
-    await asyncio.sleep(0.1)
+    await page.keyboard.type(text, delay=20)
+    await asyncio.sleep(0.05)
 
 async def smooth_scroll_to(page, target_percent):
     current_y = await page.evaluate("window.scrollY")
     max_scroll = await page.evaluate("document.documentElement.scrollHeight - window.innerHeight")
     target_y = int(target_percent * max_scroll)
     
-    step = 8 if target_y > current_y else -8
+    step = 40 if target_y > current_y else -40
     if step == 0:
         return
     steps_count = int(abs(target_y - current_y) / abs(step))
@@ -127,10 +127,10 @@ async def smooth_scroll_to(page, target_percent):
     for _ in range(steps_count):
         current_y += step
         await page.evaluate(f"window.scrollTo(0, {current_y})")
-        await asyncio.sleep(0.008) # smooth high framerate scroll wait
+        await asyncio.sleep(0.005)
         
     await page.evaluate(f"window.scrollTo(0, {target_y})")
-    await asyncio.sleep(0.6) # allow visual layout elements to settle
+    await asyncio.sleep(0.3)
 
 def generate_voiceover(text, output_file):
     print(f"1. Synthesizing voiceover narration with edge-tts (Ava voice)...")
@@ -205,44 +205,45 @@ async def record_walkthrough(html_path, temp_dir):
             }
         }""")
         await page.wait_for_timeout(500)
-        
-        # --- SCENE 1: Launch Room Onboarding (Form entry) ---
+              # --- SCENE 1: Launch Room Onboarding (Form entry) ---
         print("   - Recording Scene 1: Launch Room Form Entry")
         await smooth_type(page, "#event-name", "Quantum Hackers Cavern")
         await smooth_type(page, "#event-time", "10 PM")
         await smooth_type(page, "#event-max", "80")
         await smooth_click(page, "button[type='submit']")
-        await page.wait_for_timeout(2000) # enjoy the confetti
+        await page.wait_for_timeout(22000) # Wait for narration to finish speaking about Realm 1
         
         # --- SCENE 2: Networking Arena (Filters and modal checks) ---
         print("   - Recording Scene 2: Amethyst Networking Mine")
         await smooth_scroll_to(page, 0.20)
         
-        # Developer cards should be populated from our JS injection above
         try:
             await page.wait_for_selector("#attendee-gallery .glass-panel", timeout=3000)
             print("     Developer cards visible!")
             await smooth_click(page, "#btn-filter-Dev")
-            await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(500)
             
             # Click Icebreaker on the first visible card
             icebreaker_btn = page.locator("#attendee-gallery button:has-text('Icebreaker')").first
             if await icebreaker_btn.is_visible(timeout=3000):
                 await smooth_click(page, "#attendee-gallery button:has-text('Icebreaker')")
-                await page.wait_for_timeout(2000)
+                await page.wait_for_timeout(1500)
                 try:
                     await smooth_click(page, "button:has-text('DISCOVERY CONFIRMED')")
                 except Exception:
                     pass
+            await page.wait_for_timeout(500)
             
             # Click Match
             match_btn = page.locator("#attendee-gallery button:has-text('Match')").first
             if await match_btn.is_visible(timeout=2000):
                 await smooth_click(page, "#attendee-gallery button:has-text('Match')")
-                await page.wait_for_timeout(1000)
+                await page.wait_for_timeout(500)
         except Exception as e:
             print(f"     (Attendee interaction skipped: {e})")
-            await page.wait_for_timeout(1500)
+            await page.wait_for_timeout(1000)
+            
+        await page.wait_for_timeout(15000) # Wait for narration to finish speaking about Realm 2
         
         # --- SCENE 3: Campfire & Crystal Clicker Mini-Game ---
         print("   - Recording Scene 3: Crystal Campfire & Clicker")
@@ -253,18 +254,18 @@ async def record_walkthrough(html_path, temp_dir):
         except Exception:
             print("     (Chat input not found, continuing...)")
         
-        # Click Amethyst gemstone 15 times to earn currency
+        # Click Amethyst gemstone 10 times to earn currency
         try:
             gem_selector = ".gem-clicker"
             await smooth_move_to(page, gem_selector)
             print("     Mining crystals...")
-            for _ in range(15):
+            for _ in range(10):
                 await page.mouse.down()
-                await asyncio.sleep(0.04)
+                await asyncio.sleep(0.02)
                 await page.mouse.up()
-                await asyncio.sleep(0.04)
+                await asyncio.sleep(0.02)
                 
-            await page.wait_for_timeout(500)
+            await page.wait_for_timeout(300)
             # Buy Steel Pickaxe upgrade
             await smooth_click(page, "#btn-upgrade-pickaxe")
         except Exception:
@@ -273,16 +274,18 @@ async def record_walkthrough(html_path, temp_dir):
         # Click the hidden gem near campfire
         try:
             await smooth_click(page, ".hidden-gem")
-            await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(500)
         except Exception:
             pass
         
         # Capture a Flash Moment photo
         try:
             await smooth_click(page, "button:has-text('Capture Moment')")
-            await page.wait_for_timeout(2000)
+            await page.wait_for_timeout(1000)
         except Exception:
             print("     (Capture Moment button not found, continuing...)")
+            
+        await page.wait_for_timeout(20000) # Wait for narration to finish speaking about Realm 3
         
         # --- SCENE 4: The Alliance Forge ---
         print("   - Recording Scene 4: Team Forge Registration")
@@ -292,15 +295,17 @@ async def record_walkthrough(html_path, temp_dir):
             await smooth_type(page, "#team-looking", "UX/UI Designers, Rust Dev")
             await smooth_type(page, "#team-tech", "React, Rust, Tailwind")
             await smooth_click(page, "#team-form button[type='submit']")
-            await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(500)
         except Exception:
             print("     (Team form not found, continuing...)")
         
         try:
             await smooth_click(page, "#teams-container button:has-text('Send Inquiry')")
-            await page.wait_for_timeout(1000)
+            await page.wait_for_timeout(500)
         except Exception:
             print("     (Send Inquiry button not found, continuing...)")
+            
+        await page.wait_for_timeout(10000) # Wait for narration to finish speaking about Realm 4
 
         # --- SCENE 5: Oracle of Ideas ---
         print("   - Recording Scene 5: Oracle Idea Generator")
@@ -310,25 +315,27 @@ async def record_walkthrough(html_path, temp_dir):
             await page.wait_for_timeout(2000) # wait for slot spinner
         except Exception:
             print("     (Oracle dials not found, continuing...)")
+            
+        await page.wait_for_timeout(8000) # Wait for narration to finish speaking about Realm 5
         
         # --- SCENE 6: Bounty Board & Back to Surface ---
         print("   - Recording Scene 6: Sponsor Bounties & Scroll to Top")
         await smooth_scroll_to(page, 1.00)
-        await page.wait_for_timeout(2000) # admire bounties
+        await page.wait_for_timeout(1000) # admire bounties
         # Click header logo to scroll smoothly to top
         try:
             await smooth_click(page, "header a.cursor-pointer")
         except Exception:
             print("     (Header logo not found, scrolling manually...)")
             await page.evaluate("window.scrollTo({top: 0, behavior: 'smooth'})")
-        await page.wait_for_timeout(3500) # wait for smooth scroll animation to reach Realm 1
+        await page.wait_for_timeout(6000) # wait for smooth scroll animation to reach Realm 1 and narration to finish
         
         # Close page and context to finish video saving
         await page.close()
         await context.close()
         await browser.close()
     print("   [SUCCESS] Playwright video recording completed.")
-
+ 
 def compile_final_video(temp_dir, narration_audio, final_output):
     print("3. Compiling final video with FFmpeg...")
     # Find the recorded webm file in the temp directory
