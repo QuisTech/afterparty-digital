@@ -384,7 +384,7 @@ io.on('connection', async (socket) => {
           $setOnInsert: { gems: 0, clickPower: 1, autoMiners: 0 },
           $set: { role: role }
         },
-        { upsert: true, new: true, setDefaultsOnInsert: true }
+        { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
       );
 
       socket.emit('user stats', {
@@ -493,7 +493,7 @@ io.on('connection', async (socket) => {
       const updatedUser = await User.findOneAndUpdate(
         { name: socket.username },
         updateDoc,
-        { new: true }
+        { returnDocument: 'after' }
       );
 
       socket.emit('user stats', {
