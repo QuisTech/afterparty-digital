@@ -266,12 +266,17 @@ export function createCavern(e) {
   triggerConfetti();
 }
 
-export function requestToJoinTeam(btn, event) {
-  if (!btn) return;
-  btn.innerText = "Inquiry Sent!";
-  btn.disabled = true;
-  btn.classList.add('bg-green-600/20', 'text-green-400', 'border-green-500/30');
+export function requestToJoinTeam(teamName, event) {
+  if (state.socket) {
+    state.socket.emit('join inquiry', { teamName });
+  }
   triggerLocalConfetti(event, ['#00FFFF', '#FF007F']);
+}
+
+export function resolveTeamInquiry(teamName, attendeeName, action) {
+  if (state.socket) {
+    state.socket.emit('respond inquiry', { teamName, attendeeName, action });
+  }
 }
 
 export function spinDials(event) {
@@ -453,17 +458,71 @@ export function renderTeams(teams) {
     container.innerHTML = `<div class="col-span-2 text-center py-10 text-gray-500 font-mono text-xs">NO FORGED ALLIANCES IN THIS SHAFT</div>`;
     return;
   }
-  container.innerHTML = teams.map(t => `
-    <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
-      <span class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">${t.membersCount}/4 Members</span>
-      <h4 class="text-sm font-black text-white uppercase tracking-tight">${t.name}</h4>
-      <p class="text-[9px] text-gray-400 font-mono">Building project using: [${t.tech}]</p>
-      <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: ${t.looking}</div>
-      <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
-        <button onclick="requestToJoinTeam(this, event)" class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">Send Inquiry</button>
+  container.innerHTML = teams.map(t => {
+    const isCreator = t.creator === state.currentUser;
+    const isMember = t.members && t.members.includes(state.currentUser);
+    const hasSentInquiry = t.inquiries && t.inquiries.includes(state.currentUser);
+
+    let buttonHtml = '';
+    if (isCreator) {
+      buttonHtml = `
+        <div class="w-full space-y-2">
+          <div class="text-[9px] text-[#00FFFF] font-bold">👑 You are the Creator</div>
+          ${t.inquiries && t.inquiries.length > 0 ? `
+            <div class="space-y-1 mt-1 border-t border-white/10 pt-2">
+              <div class="text-[8px] text-gray-400 uppercase tracking-widest">Pending Inquiries:</div>
+              ${t.inquiries.map(user => `
+                <div class="flex justify-between items-center bg-white/5 p-1.5 rounded-lg border border-white/5">
+                  <span class="text-[9px] text-white font-bold">${user}</span>
+                  <div class="flex gap-1">
+                    <button onclick="resolveTeamInquiry('${t.name}', '${user}', 'accept')" class="px-2 py-0.5 bg-green-500/20 text-green-400 border border-green-500/30 rounded text-[7px] hover:bg-green-500/30 transition-all font-mono font-bold">Accept</button>
+                    <button onclick="resolveTeamInquiry('${t.name}', '${user}', 'decline')" class="px-2 py-0.5 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded text-[7px] hover:bg-rose-500/30 transition-all font-mono font-bold">Decline</button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="text-[8px] text-gray-500 italic">No pending inquiries</div>
+          `}
+        </div>
+      `;
+    } else if (isMember) {
+      buttonHtml = `
+        <button disabled class="flex-grow py-2 bg-green-600/20 text-green-400 border border-green-500/30 rounded-xl text-[8px] font-black uppercase tracking-widest font-mono">
+          Joined
+        </button>
+      `;
+    } else if (hasSentInquiry) {
+      buttonHtml = `
+        <button disabled class="flex-grow py-2 bg-yellow-600/20 text-yellow-400 border border-yellow-500/30 rounded-xl text-[8px] font-black uppercase tracking-widest font-mono">
+          Inquiry Sent
+        </button>
+      `;
+    } else {
+      buttonHtml = `
+        <button onclick="requestToJoinTeam('${t.name}', event)" class="flex-grow py-2 bg-white/5 border border-white/10 rounded-xl hover:bg-white/10 transition-all font-bold">
+          Send Inquiry
+        </button>
+      `;
+    }
+
+    const membersListHtml = t.members && t.members.length > 0 
+      ? `<div class="text-[8px] font-mono text-gray-500 mt-1">Members: ${t.members.join(', ')}</div>`
+      : '';
+
+    return `
+      <div class="glass-panel p-4 rounded-2xl border border-white/5 space-y-2 card-adventure relative">
+        <span class="bg-[#00FFFF]/10 text-[#00FFFF] text-[8px] font-black px-2 py-0.5 rounded-full border border-[#00FFFF]/20 absolute top-4 right-4">${t.membersCount}/4 Members</span>
+        <h4 class="text-sm font-black text-white uppercase tracking-tight">${t.name}</h4>
+        <p class="text-[9px] text-gray-400 font-mono">Building project using: [${t.tech}]</p>
+        <div class="pt-1 text-[8px] font-mono text-[#FFB800] uppercase tracking-wider font-bold">Needs: ${t.looking}</div>
+        ${membersListHtml}
+        <div class="flex gap-2 pt-2 text-[8px] font-black uppercase tracking-widest font-mono">
+          ${buttonHtml}
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 export function renderPhotos(photos) {

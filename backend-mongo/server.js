@@ -157,6 +157,9 @@ const teamSchema = new mongoose.Schema({
   looking: String,
   tech: String,
   membersCount: { type: Number, default: 1 },
+  creator: { type: String, required: true },
+  members: { type: [String], default: [] },
+  inquiries: { type: [String], default: [] }
 });
 
 const photoSchema = new mongoose.Schema({
@@ -212,9 +215,9 @@ async function seedDatabase() {
     if (teamCount === 0) {
       console.log('🌱 Seeding initial teams...');
       const seedTeams = [
-        { name: 'Amethyst AI Guild', looking: 'AI Engineer', tech: 'Python, PyTorch', membersCount: 3 },
-        { name: 'Glider Designers', looking: 'UX Designer', tech: 'Figma, Tailwind', membersCount: 2 },
-        { name: 'Rust Cavernites', looking: 'Full Stack Dev', tech: 'Rust, Node.js', membersCount: 1 }
+        { name: 'Amethyst AI Guild', looking: 'AI Engineer', tech: 'Python, PyTorch', membersCount: 3, creator: 'Michquis', members: ['Michquis', 'QuantumMiner', 'AetherCavern'], inquiries: [] },
+        { name: 'Glider Designers', looking: 'UX Designer', tech: 'Figma, Tailwind', membersCount: 2, creator: 'NovaDesigner', members: ['NovaDesigner', 'PixelArtisan'], inquiries: [] },
+        { name: 'Rust Cavernites', looking: 'Full Stack Dev', tech: 'Rust, Node.js', membersCount: 1, creator: 'RustCoder', members: ['RustCoder'], inquiries: [] }
       ];
       await Team.insertMany(seedTeams);
       console.log('✅ Teams seeded!');
@@ -535,15 +538,77 @@ io.on('connection', async (socket) => {
   // Create Team Alliance handler
   socket.on('create team', async (data) => {
     try {
+      const username = socket.username || 'Anonymous';
       await Team.findOneAndUpdate(
         { name: data.name },
-        { name: data.name, looking: data.looking, tech: data.tech, membersCount: 1 },
+        { 
+          name: data.name, 
+          looking: data.looking, 
+          tech: data.tech, 
+          membersCount: 1,
+          creator: username,
+          members: [username],
+          inquiries: []
+        },
         { upsert: true }
       );
       const teams = await Team.find();
       io.emit('teams update', teams);
     } catch (err) {
       console.error('Create Team error:', err.message);
+    }
+  });
+
+  // Join Team Inquiry handler
+  socket.on('join inquiry', async (data) => {
+    try {
+      const username = socket.username;
+      if (!username) return;
+      const team = await Team.findOne({ name: data.teamName });
+      if (team) {
+        // Prevent duplicate inquiries, creator inquiring, or member inquiring
+        if (team.creator === username || (team.members && team.members.includes(username)) || (team.inquiries && team.inquiries.includes(username))) {
+          return;
+        }
+        team.inquiries = team.inquiries || [];
+        team.inquiries.push(username);
+        await team.save();
+        
+        const teams = await Team.find();
+        io.emit('teams update', teams);
+        io.emit('system message', `📩 ${username} requested to join team "${team.name}"!`);
+      }
+    } catch (err) {
+      console.error('Join inquiry error:', err.message);
+    }
+  });
+
+  // Respond Team Inquiry handler
+  socket.on('respond inquiry', async (data) => {
+    try {
+      const username = socket.username;
+      if (!username) return;
+      const team = await Team.findOne({ name: data.teamName });
+      if (team && team.creator === username) {
+        // Remove from inquiries list
+        team.inquiries = (team.inquiries || []).filter(u => u !== data.attendeeName);
+        if (data.action === 'accept') {
+          team.members = team.members || [];
+          if (!team.members.includes(data.attendeeName)) {
+            team.members.push(data.attendeeName);
+            team.membersCount = team.members.length;
+            io.emit('system message', `🎉 ${data.attendeeName} has joined the team "${team.name}"!`);
+          }
+        } else {
+          io.emit('system message', `❌ Request for ${data.attendeeName} to join "${team.name}" was declined.`);
+        }
+        await team.save();
+
+        const teams = await Team.find();
+        io.emit('teams update', teams);
+      }
+    } catch (err) {
+      console.error('Respond inquiry error:', err.message);
     }
   });
 

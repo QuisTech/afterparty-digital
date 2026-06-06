@@ -15,6 +15,7 @@ import {
   createTeam,
   createCavern,
   requestToJoinTeam,
+  resolveTeamInquiry,
   spinDials,
   handleUpload,
   handleLikePhoto,
@@ -40,6 +41,7 @@ window.sendChat = sendChat;
 window.createTeam = createTeam;
 window.createCavern = createCavern;
 window.requestToJoinTeam = requestToJoinTeam;
+window.resolveTeamInquiry = resolveTeamInquiry;
 window.spinDials = spinDials;
 window.handleUpload = handleUpload;
 window.handleLikePhoto = handleLikePhoto;
