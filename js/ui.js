@@ -246,6 +246,26 @@ export function createTeam(e) {
   triggerConfetti();
 }
 
+export function createCavern(e) {
+  e.preventDefault();
+  const nameEl = document.getElementById('event-name');
+  const timeEl = document.getElementById('event-time');
+  const maxEl = document.getElementById('event-max');
+
+  const name = nameEl ? nameEl.value.trim() : '';
+  const launchTime = timeEl ? timeEl.value.trim() : '';
+  const capacity = maxEl ? parseInt(maxEl.value.trim(), 10) : 100;
+
+  if (state.socket) {
+    state.socket.emit('create cavern', { name, launchTime, capacity });
+    state.socket.emit('chat message', { message: `🌋 New cavern shaft deployed: "${name}" launching ${launchTime} (Max capacity: ${capacity})!` });
+  }
+
+  const eventForm = document.getElementById('event-form');
+  if (eventForm) eventForm.reset();
+  triggerConfetti();
+}
+
 export function requestToJoinTeam(btn, event) {
   if (!btn) return;
   btn.innerText = "Inquiry Sent!";

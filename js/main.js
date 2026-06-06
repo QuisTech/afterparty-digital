@@ -13,6 +13,7 @@ import {
   toggleMatch,
   sendChat,
   createTeam,
+  createCavern,
   requestToJoinTeam,
   spinDials,
   handleUpload,
@@ -37,6 +38,7 @@ window.closeModal = closeModal;
 window.toggleMatch = toggleMatch;
 window.sendChat = sendChat;
 window.createTeam = createTeam;
+window.createCavern = createCavern;
 window.requestToJoinTeam = requestToJoinTeam;
 window.spinDials = spinDials;
 window.handleUpload = handleUpload;

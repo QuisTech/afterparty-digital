@@ -21,7 +21,7 @@
       <h3 class="text-xs font-black uppercase tracking-widest text-[#FF007F] flex items-center gap-2">
         <i class="fas fa-fire-flame-curved animate-pulse"></i> Deploy Cavern Shaft
       </h3>
-      <form id="event-form" class="space-y-3 font-mono text-[9px]">
+      <form id="event-form" onsubmit="createCavern(event)" class="space-y-3 font-mono text-[9px]">
         <div>
           <label class="block uppercase tracking-widest text-gray-400 mb-0.5">Cavern Name</label>
           <input type="text" id="event-name" required placeholder="Midnight Hackers Cavern"
