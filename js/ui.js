@@ -279,56 +279,302 @@ export function resolveTeamInquiry(teamName, attendeeName, action) {
   }
 }
 
+export const slotTechs = ["AI Agent", "IoT Core", "Web3 DB", "Rust Core", "AR Glass", "Crypto Vault", "Neural Mesh", "Edge Server"];
+export const slotRealms = ["Caverns", "Space", "Ecology", "Health", "FinTech", "Music", "Education", "Gaming"];
+export const slotFocus = ["Security", "Gamified", "Eco Friendly", "Offline First", "Real-Time", "Privacy", "Accessibility", "Low-Code"];
+
+const techColors = ["#FF007F", "#00FFFF", "#FFB800", "#10B981", "#A78BFA", "#F43F5E", "#3B82F6", "#F59E0B"];
+const realmColors = ["#00FFFF", "#FFB800", "#FF007F", "#A78BFA", "#10B981", "#3B82F6", "#F59E0B", "#EC4899"];
+const focusColors = ["#FFB800", "#FF007F", "#00FFFF", "#10B981", "#A78BFA", "#3B82F6", "#EC4899", "#F59E0B"];
+
+export function generateProjectIdea(tech, realm, focus) {
+  const techNouns = {
+    "AI Agent": ["Autonomous Cog", "Neural Envoy", "AI Warden", "Cognitive Proxy"],
+    "IoT Core": ["Sensor Grid", "Tether Node", "Ambient Link", "Telemetry Hub"],
+    "Web3 DB": ["Decentral Trust", "Ledger Vault", "Consensus Store", "Chain Registry"],
+    "Rust Core": ["Ironforge Engine", "Oxidized Kernel", "Rustbound Daemon", "Safe Conduit"],
+    "AR Glass": ["Retinal Overlay", "Spatial HUD", "Optic Matrix", "Holo Prism"],
+    "Crypto Vault": ["Enclave Shield", "Cipher Safe", "Zero-Knowledge Safe", "Crypt Vault"],
+    "Neural Mesh": ["Synaptic Grid", "Cerebral Loom", "Mesh Intelligencer", "Neuro Cluster"],
+    "Edge Server": ["Border Node", "Periphery Gateway", "Edge Vanguard", "Local Sentinel"]
+  };
+
+  const realmNouns = {
+    "Caverns": ["Subterranean", "Underdark", "Deep-Rock", "Speleo"],
+    "Space": ["Orbital", "Exosphere", "Cosmic", "Astral"],
+    "Ecology": ["Biosphere", "Eco-System", "Greenfield", "Biotope"],
+    "Health": ["Clinical", "Biomed", "Somat", "Pathfinder"],
+    "FinTech": ["Securities", "Fiscal", "Ledger-Flow", "Cap-Market"],
+    "Music": ["Acoustic", "Harmonic", "Waveform", "Sonar"],
+    "Education": ["Scholastic", "Pedagogy", "Cognition", "Academics"],
+    "Gaming": ["Interactive", "Simulacra", "Luden", "Playground"]
+  };
+
+  const goalSuffixes = {
+    "Security": ["Sentinel", "Shield", "Fortress", "Bastion"],
+    "Gamified": ["Quest", "Odyssey", "Crucible", "Arcade"],
+    "Eco Friendly": ["Flora", "Gaia", "Equilibrium", "Cycle"],
+    "Offline First": ["Vault", "Anchor", "Bunker", "Outpost"],
+    "Real-Time": ["Sync", "Pulse", "Vortex", "Velocity"],
+    "Privacy": ["Shadow", "Enigma", "Cloak", "Sanctum"],
+    "Accessibility": ["Bridge", "Nexus", "Beacon", "Equinox"],
+    "Low-Code": ["Canvas", "Forge", "Studio", "Builder"]
+  };
+
+  const techDescs = {
+    "AI Agent": "Utilizes LLM-driven autonomous agents with tool-use capabilities to make real-time decisions",
+    "IoT Core": "Deploys a low-power mesh network of physical telemetry sensors collecting telemetry stream data",
+    "Web3 DB": "Establishes a decentralized, tamper-proof state layer with consensus verification",
+    "Rust Core": "Leverages a memory-safe, ultra-high-performance engine compiled in Rust for concurrent workload safety",
+    "AR Glass": "Injects real-time spatial overlays and interactive HUD widgets into a wearable augmented-reality optic display",
+    "Crypto Vault": "Secures key assets within hardware-isolated zero-knowledge enclave vaults",
+    "Neural Mesh": "Runs decentralized ML inference across an interconnected swarm of local devices",
+    "Edge Server": "Deploys a low-latency caching gateway to process and store heavy datasets locally"
+  };
+
+  const realmDescs = {
+    "Caverns": "tailored for subterranean research, cave survey monitoring, and deep-earth exploration teams",
+    "Space": "specifically designed to survive extreme environments, high-radiation orbits, and deep-space communications",
+    "Ecology": "focused on planetary restoration, carbon capture tracking, and environmental footprint modeling",
+    "Health": "engineered to satisfy medical HIPAA standards, patient diagnostics telemetry, and critical biosensor alerts",
+    "FinTech": "integrated directly into algorithmic micro-transaction queues, liquidity pools, and verified ledger networks",
+    "Music": "powering real-time multi-track audio synthesis, acoustic analysis, and spatial audio rendering",
+    "Education": "providing collaborative learning environments, personalized pedagogy diagnostics, and visual cognitive aids",
+    "Gaming": "driving dynamic gameplay mechanics, interactive simulations, and immersive multiplayer states"
+  };
+
+  const goalDescs = {
+    "Security": "The architecture implements end-to-end encryption, multi-signature authentication, and zero-trust verification to defend against external interference.",
+    "Gamified": "The system features immersive quests, experience points tracking, leveling up, and digital collectible rewards to incentivize high engagement.",
+    "Eco Friendly": "The platform prioritizes green hosting providers, minimal network roundtrips, and optimized CPU cycles to minimize the environmental carbon footprint.",
+    "Offline First": "It features robust local storage sync databases and conflict-free replicated data types (CRDTs) to function perfectly in remote locations without network.",
+    "Real-Time": "Data flows through an ultra-low-latency websocket layer with visual push events, sub-10ms pub/sub delivery, and fluid UI reactive updates.",
+    "Privacy": "Includes homomorphic encryption, local-only hashing, and differential privacy to guarantee user identity and data protection.",
+    "Accessibility": "Designed with screen-reader optimizations, high-contrast states, keyboard-only shortcuts, and simplified interfaces for full inclusivity.",
+    "Low-Code": "Includes a drag-and-drop builder canvas, visual node connections, and auto-generated boilerplates to allow rapid development by anyone."
+  };
+
+  const getHash = (str) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash);
+  };
+
+  const techHash = getHash(tech);
+  const realmHash = getHash(realm);
+  const goalHash = getHash(focus);
+
+  const tNoun = techNouns[tech][techHash % techNouns[tech].length];
+  const rNoun = realmNouns[realm][realmHash % realmNouns[realm].length];
+  const gSuffix = goalSuffixes[focus][goalHash % goalSuffixes[focus].length];
+
+  const title = `${rNoun} ${tNoun} - The ${gSuffix}`;
+  const description = `${techDescs[tech]}, ${realmDescs[realm]}. ${goalDescs[focus]}`;
+
+  let baseFeas = 85;
+  if (tech === "AI Agent") baseFeas = 85;
+  else if (tech === "IoT Core") baseFeas = 75;
+  else if (tech === "Web3 DB") baseFeas = 70;
+  else if (tech === "Rust Core") baseFeas = 80;
+  else if (tech === "AR Glass") baseFeas = 60;
+  else if (tech === "Crypto Vault") baseFeas = 75;
+  else if (tech === "Neural Mesh") baseFeas = 55;
+  else if (tech === "Edge Server") baseFeas = 85;
+
+  let realmModFeas = 0;
+  if (realm === "Caverns") realmModFeas = -5;
+  else if (realm === "Space") realmModFeas = -15;
+  else if (realm === "Ecology") realmModFeas = 0;
+  else if (realm === "Health") realmModFeas = -10;
+  else if (realm === "FinTech") realmModFeas = -10;
+  else if (realm === "Music") realmModFeas = 5;
+  else if (realm === "Education") realmModFeas = 5;
+  else if (realm === "Gaming") realmModFeas = 0;
+
+  let goalModFeas = 0;
+  if (focus === "Security") goalModFeas = -5;
+  else if (focus === "Gamified") goalModFeas = 0;
+  else if (focus === "Eco Friendly") goalModFeas = 0;
+  else if (focus === "Offline First") goalModFeas = -10;
+  else if (focus === "Real-Time") goalModFeas = -5;
+  else if (focus === "Privacy") goalModFeas = -5;
+  else if (focus === "Accessibility") goalModFeas = 5;
+  else if (focus === "Low-Code") goalModFeas = 10;
+
+  let feasibilityVal = baseFeas + realmModFeas + goalModFeas;
+  feasibilityVal = Math.min(98, Math.max(40, feasibilityVal));
+  const feasibility = `${feasibilityVal}%`;
+
+  let baseComp = 2;
+  if (["AR Glass", "Neural Mesh"].includes(tech)) baseComp = 3.5;
+  else if (["AI Agent", "IoT Core", "Web3 DB", "Crypto Vault"].includes(tech)) baseComp = 3;
+  else if (["Rust Core"].includes(tech)) baseComp = 2.5;
+  else baseComp = 2;
+
+  let realmModComp = 0;
+  if (realm === "Space") realmModComp = 1.5;
+  else if (["Health", "FinTech"].includes(realm)) realmModComp = 1;
+  else if (["Caverns", "Gaming"].includes(realm)) realmModComp = 0.5;
+
+  let goalModComp = 0;
+  if (["Security", "Privacy", "Offline First"].includes(focus)) goalModComp = 1;
+  else if (["Real-Time", "Gamified", "Accessibility"].includes(focus)) goalModComp = 0.5;
+  else if (focus === "Low-Code") goalModComp = -0.5;
+
+  const totalComp = baseComp + realmModComp + goalModComp;
+  let complexity = "Medium";
+  if (totalComp >= 4) complexity = "Very High";
+  else if (totalComp >= 3) complexity = "High";
+  else if (totalComp >= 2) complexity = "Medium";
+  else complexity = "Low";
+
+  return { title, description, feasibility, complexity };
+}
+
+export function initOracle() {
+  const slotTechEl = document.getElementById('slot-tech');
+  const slotIndustryEl = document.getElementById('slot-industry');
+  const slotFocusEl = document.getElementById('slot-focus');
+
+  if (!slotTechEl || !slotIndustryEl || !slotFocusEl) return;
+
+  const reps = 6;
+
+  let techHtml = '';
+  for (let r = 0; r < reps; r++) {
+    slotTechs.forEach((tech, i) => {
+      const color = techColors[i % techColors.length];
+      techHtml += `<div class="spinner-item" style="color: ${color};">${tech}</div>`;
+    });
+  }
+  slotTechEl.innerHTML = techHtml;
+
+  let industryHtml = '';
+  for (let r = 0; r < reps; r++) {
+    slotRealms.forEach((realm, i) => {
+      const color = realmColors[i % realmColors.length];
+      industryHtml += `<div class="spinner-item" style="color: ${color};">${realm}</div>`;
+    });
+  }
+  slotIndustryEl.innerHTML = industryHtml;
+
+  let focusHtml = '';
+  for (let r = 0; r < reps; r++) {
+    slotFocus.forEach((focus, i) => {
+      const color = focusColors[i % focusColors.length];
+      focusHtml += `<div class="spinner-item" style="color: ${color};">${focus}</div>`;
+    });
+  }
+  slotFocusEl.innerHTML = focusHtml;
+
+  slotTechEl.style.transform = 'translateY(0px)';
+  slotIndustryEl.style.transform = 'translateY(0px)';
+  slotFocusEl.style.transform = 'translateY(0px)';
+}
+
 export function spinDials(event) {
+  const spinButton = event.currentTarget;
+  if (spinButton.disabled) return;
+  spinButton.disabled = true;
+  spinButton.innerHTML = `SPINNING... <i class="fas fa-spinner fa-spin ml-1"></i>`;
+
   triggerLocalConfetti(event, ['#FFB800', '#FF007F']);
 
-  const slotTechs = ["AI Agent", "IoT Core", "Web3 DB", "Rust Core", "AR Glass", "Crypto Vault", "Neural Mesh", "Edge Server"];
-  const slotRealms = ["Caverns", "Space", "Ecology", "Health", "FinTech", "Music", "Education", "Gaming"];
-  const slotFocus = ["Security", "Gamified", "Eco Friendly", "Offline First", "Real-Time", "Privacy", "Accessibility", "Low-Code"];
-
-  const tech = slotTechs[Math.floor(Math.random() * slotTechs.length)];
-  const realm = slotRealms[Math.floor(Math.random() * slotRealms.length)];
-  const focus = slotFocus[Math.floor(Math.random() * slotFocus.length)];
+  const techTargetIdx = Math.floor(Math.random() * slotTechs.length);
+  const realmTargetIdx = Math.floor(Math.random() * slotRealms.length);
+  const focusTargetIdx = Math.floor(Math.random() * slotFocus.length);
 
   const slotTechEl = document.getElementById('slot-tech');
   const slotIndustryEl = document.getElementById('slot-industry');
   const slotFocusEl = document.getElementById('slot-focus');
 
-  if (slotTechEl) slotTechEl.innerHTML = `<div class="spinner-item text-[#FF007F]">${tech}</div>`;
-  if (slotIndustryEl) slotIndustryEl.innerHTML = `<div class="spinner-item text-[#00FFFF]">${realm}</div>`;
-  if (slotFocusEl) slotFocusEl.innerHTML = `<div class="spinner-item text-[#FFB800]">${focus}</div>`;
+  const targetTechOffset = -((4 * slotTechs.length) + techTargetIdx) * 48;
+  const targetRealmOffset = -((4 * slotRealms.length) + realmTargetIdx) * 48;
+  const targetFocusOffset = -((4 * slotFocus.length) + focusTargetIdx) * 48;
 
-  const titles = [
-    `Autonomous ${tech} for ${realm} ${focus}`,
-    `Next-Gen ${tech} in ${realm} Sector`,
-    `${focus} ${tech} Platform for ${realm}`
-  ];
-  const descs = [
-    `Build a highly-scalable ${tech} ecosystem designed specifically for ${realm} tracking, focused on delivering ${focus} metrics.`,
-    `Formulate a developer-friendly ${tech} utility focusing on ${focus} operations within the ${realm} hackathon landscape.`,
-    `An edge-ready ${tech} portal enabling participants to build ${focus} integrations in the active ${realm} arena.`
-  ];
-
-  const chosenTitle = titles[Math.floor(Math.random() * titles.length)];
-  const titleEl = document.getElementById('idea-title');
-  const descEl = document.getElementById('idea-desc');
-
-  if (titleEl) titleEl.innerText = chosenTitle;
-  if (descEl) descEl.innerText = descs[Math.floor(Math.random() * descs.length)];
-
-  const feasibility = ["85%", "90%", "95%", "80%"][Math.floor(Math.random() * 4)];
-  const complexity = ["Low", "Medium", "High"][Math.floor(Math.random() * 3)];
-
-  const feasibilityEl = document.getElementById('idea-feasibility');
-  const complexityEl = document.getElementById('idea-complexity');
-
-  if (feasibilityEl) feasibilityEl.innerText = feasibility;
-  if (complexityEl) complexityEl.innerText = complexity;
-
-  // Broadcast project idea spin
-  if (state.socket) {
-    state.socket.emit('chat message', { message: `🎲 Generated project idea spark: "${chosenTitle}"` });
+  if (slotTechEl) {
+    slotTechEl.style.transition = 'transform 1.0s cubic-bezier(0.15, 0.85, 0.35, 1)';
+    slotTechEl.style.transform = `translateY(${targetTechOffset}px)`;
   }
+  if (slotIndustryEl) {
+    slotIndustryEl.style.transition = 'transform 1.3s cubic-bezier(0.15, 0.85, 0.35, 1)';
+    slotIndustryEl.style.transform = `translateY(${targetRealmOffset}px)`;
+  }
+  if (slotFocusEl) {
+    slotFocusEl.style.transition = 'transform 1.6s cubic-bezier(0.15, 0.85, 0.35, 1)';
+    slotFocusEl.style.transform = `translateY(${targetFocusOffset}px)`;
+  }
+
+  const tech = slotTechs[techTargetIdx];
+  const realm = slotRealms[realmTargetIdx];
+  const focus = slotFocus[focusTargetIdx];
+
+  const { title, description, feasibility, complexity } = generateProjectIdea(tech, realm, focus);
+
+  setTimeout(() => {
+    const titleEl = document.getElementById('idea-title');
+    const descEl = document.getElementById('idea-desc');
+    const feasibilityEl = document.getElementById('idea-feasibility');
+    const complexityEl = document.getElementById('idea-complexity');
+
+    if (titleEl) {
+      titleEl.innerText = title;
+      titleEl.classList.add('animate-pulse');
+      setTimeout(() => titleEl.classList.remove('animate-pulse'), 1000);
+    }
+    if (descEl) descEl.innerText = description;
+
+    if (feasibilityEl) {
+      feasibilityEl.innerText = feasibility;
+      const val = parseInt(feasibility);
+      if (val >= 80) {
+        feasibilityEl.className = 'text-green-400 font-bold';
+      } else if (val >= 60) {
+        feasibilityEl.className = 'text-yellow-400 font-bold';
+      } else {
+        feasibilityEl.className = 'text-rose-400 font-bold';
+      }
+    }
+
+    if (complexityEl) {
+      complexityEl.innerText = complexity;
+      if (complexity === 'Low') {
+        complexityEl.className = 'text-green-400 font-bold';
+      } else if (complexity === 'Medium') {
+        complexityEl.className = 'text-[#00FFFF] font-bold';
+      } else if (complexity === 'High') {
+        complexityEl.className = 'text-orange-400 font-bold';
+      } else {
+        complexityEl.className = 'text-rose-500 font-bold animate-pulse';
+      }
+    }
+
+    if (state.socket) {
+      state.socket.emit('chat message', { message: `🎲 Generated project idea spark: "${title}"` });
+    }
+
+    setTimeout(() => {
+      if (slotTechEl) {
+        slotTechEl.style.transition = 'none';
+        slotTechEl.style.transform = `translateY(${-(techTargetIdx * 48)}px)`;
+      }
+      if (slotIndustryEl) {
+        slotIndustryEl.style.transition = 'none';
+        slotIndustryEl.style.transform = `translateY(${-(realmTargetIdx * 48)}px)`;
+      }
+      if (slotFocusEl) {
+        slotFocusEl.style.transition = 'none';
+        slotFocusEl.style.transform = `translateY(${-(focusTargetIdx * 48)}px)`;
+      }
+
+      spinButton.disabled = false;
+      spinButton.innerHTML = `ROLL IDEA DIALS <i class="fas fa-sync-alt ml-1"></i>`;
+
+      triggerConfetti();
+    }, 50);
+  }, 1700);
 }
 
 export function handleJoin(e) {

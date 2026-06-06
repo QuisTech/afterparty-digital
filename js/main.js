@@ -17,6 +17,7 @@ import {
   requestToJoinTeam,
   resolveTeamInquiry,
   spinDials,
+  initOracle,
   handleUpload,
   handleLikePhoto,
   handleJoin,
@@ -43,6 +44,7 @@ window.createCavern = createCavern;
 window.requestToJoinTeam = requestToJoinTeam;
 window.resolveTeamInquiry = resolveTeamInquiry;
 window.spinDials = spinDials;
+window.initOracle = initOracle;
 window.handleUpload = handleUpload;
 window.handleLikePhoto = handleLikePhoto;
 window.handleJoin = handleJoin;
@@ -75,6 +77,9 @@ async function initApp() {
   // 3. Render base lists and stats
   updateMiningUI();
   renderAttendees();
+
+  // Initialize Oracle dial strips dynamically
+  initOracle();
 
   // 4. Setup web sockets
   setupSocket(BACKEND_URL);
