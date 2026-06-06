@@ -17,7 +17,7 @@ We wanted to build something that does true justice to our chosen domain. We env
 ## 🛠️ What it Does
 Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-themed Realms:
 
-1. **Realm 1: Launch Room**: The event gateway. Organizers configure custom event caverns with capacity limits, synced instantly to active status dashboards and check-in QR codes.
+1. **Realm 1: Launch Room**: The event gateway. Organizers deploy custom event caverns via a WebSocket form submission that instantly syncs to the active status dashboard and check-in QR codes, preventing page reloads.
 2. **Realm 2: Amethyst Networking Mine**: A visual developer card gallery. Hackers check in and select their real roles (AI Engineer, ML Researcher, UX Designer, etc.). Users search or filter the active gallery to spot matching stack developers.
 3. **Realm 3: Crystal Campfire & Mini-Game**: A social hub containing:
    * A flickering CSS campfire and real-time live chat board.
@@ -25,7 +25,7 @@ Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-t
    * A **Secure Upgrades Shop** where players use mined crystals to upgrade their Steel Pickaxes or hire Goose Miners. Upgrades and costs are validated server-side to prevent console hacking.
    * A **Live Photo Wall** where users upload images. The wall container is restricted to a scrollable feed, preventing large uploads from breaking layout symmetry.
    * Floating purple particle sparks and hidden amethyst crystals (easter eggs) styled adjacent to logs.
-4. **Realm 4: The Alliance Forge**: A team recruitment registry. Teams publish concepts and Stack vacancies, and solo developers send instant inquiries to join.
+4. **Realm 4: The Alliance Forge**: A real-time, database-backed team recruitment and alliance-building registry. Teams publish concepts and stack vacancies. Solo developers submit join inquiries that persist in MongoDB. Team creators review pending requests in real-time, approving or declining applicants to update team rosters and broadcast system-wide updates.
 5. **Realm 5: Oracle of Ideas**: A production-grade 3-dial slot machine. Staggered physical reel animations (built using dynamic CSS translations and ease-out cubic-bezier curves) spin through technologies, industry sectors, and product goals. A custom-designed rule engine dynamically synthesizes a cohesive, professional-grade 3-sentence project prompt, calculates a realistic estimated feasibility percentage, and computes a complexity rating (from Low to Very High) color-coded by badge.
 6. **Realm 6: Sponsor Bounty Board**: A showcase of API challenges (OpenAI, MongoDB, Vercel) alongside requirements and rewards.
 
@@ -49,6 +49,8 @@ Afterparty Digital takes hackers on a sloped diagonal journey through 6 custom-t
 
 ## 🎉 Accomplishments That We're Proud Of
 * Built a fully production-ready, database-backed web application without relying on heavy frontend frameworks, resulting in extremely fast loading times and smooth rendering.
+* Engineered a real-time WebSocket connection loop that synchronizes user check-ins, active cavern status, upgrades, live photos, and team join inquiries.
+* Designed a dual-perspective team recruitment interface (The Alliance Forge) allowing applicants to request joins and creators to review, accept, or decline inquiries in real-time with automatic database persistence.
 * Created secure, server-side validation rules for clicker upgrades, making the mini-game proof against console click hacks.
 * Solved responsive diagonal-to-vertical layout routing to ensure a premium, modern design aesthetic.
 * Engineered a high-fidelity staggered dial spinner and dynamic template synthesizer for the Oracle of Ideas, generating 512 distinct, coherent hackathon prompt concepts with realistic feasibility/complexity scoring completely offline in the browser.
